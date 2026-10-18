@@ -7,3 +7,6 @@
 # Xcode user state
 xcuserdata/
 *.xcuserstate
+
+# Local build output
+/dist/
