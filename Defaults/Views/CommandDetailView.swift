@@ -47,6 +47,11 @@ struct CommandDetailView: View {
                     .font(.jb(10))
                     .foregroundStyle(.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
+                
+                HStack(spacing: 0) {
+                    Spacer(minLength: 0)
+                    terminalButtonSmall
+                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
