@@ -188,12 +188,12 @@ struct CommandDetailView: View {
         Button(action: openInTerminal) {
             Image(systemName: "terminal.fill")
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
                 .frame(width: 22, height: 22)
-                .background(Color.black, in: RoundedRectangle(cornerRadius: 6))
+                .background(Color.white, in: RoundedRectangle(cornerRadius: 6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(Color.white.opacity(0.18), lineWidth: 1)
+                        .strokeBorder(Color.black.opacity(0.18), lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)
@@ -371,14 +371,10 @@ struct CommandDetailView: View {
         var error: NSDictionary?
         NSAppleScript(source: script)?.executeAndReturnError(&error)
         
-        if let error = error {
-            let msg = error[NSAppleScript.errorMessage] as? String ?? "Unknown error"
+        // If scripting refused, the command is already on the clipboard, so
+        // just bringing Terminal forward is enough.
+        if error != nil {
             NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
-            presentAlert(
-                title: "Opened Terminal",
-                message: "Could not run the command automatically (\(msg)).\n\nThe command was copied to the clipboard — paste it with ⌘V.",
-                style: .warning
-            )
         }
     }
     
