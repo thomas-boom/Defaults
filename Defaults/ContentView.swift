@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var selectedCategory: DefaultsCategory? = nil
     @State private var searchText = ""
     @State private var copiedCommand: String? = nil
+    @State private var authGranted = false
     
     var filteredCommands: [DefaultsCommand] {
         let filtered = CommandStore.allCommands.filter { command in
@@ -61,7 +62,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(filteredCommands) { command in
-                        CommandRowView(command: command) { copied in
+                        CommandRowView(command: command, authGranted: $authGranted) { copied in
                             copyToClipboard(copied)
                         }
                     }
@@ -77,6 +78,14 @@ struct ContentView: View {
                     )
                     .padding()
                 }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: requestAuth) {
+                    Label(authGranted ? "Auth Granted" : "Request Sudo Access", systemImage: authGranted ? "lock.open.fill" : "lock.shield")
+                }
+                .tint(authGranted ? .green : .accentColor)
             }
         }
         .overlay(alignment: .top) {
@@ -98,12 +107,38 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 700, minHeight: 500)
+        .onAppear {
+            requestAuth()
+        }
     }
     
     private func copyToClipboard(_ string: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(string, forType: .string)
         copiedCommand = string
+    }
+    
+    private func requestAuth() {
+        let script = "do shell script \"true\" with administrator privileges"
+        let appleScript = NSAppleScript(source: script)
+        var error: NSDictionary?
+        _ = appleScript?.executeAndReturnError(&error)
+        if error == nil {
+            authGranted = true
+            let alert = NSAlert()
+            alert.messageText = "Sudo Access Granted"
+            alert.informativeText = "You can now apply and restart system processes without repeated prompts."
+            alert.alertStyle = .informational
+            alert.runModal()
+        } else {
+            authGranted = false
+            let msg = error?[NSAppleScript.errorMessage] as? String ?? "Permission denied"
+            let alert = NSAlert()
+            alert.messageText = "Authorization Failed"
+            alert.informativeText = msg
+            alert.alertStyle = .warning
+            alert.runModal()
+        }
     }
 }
 
