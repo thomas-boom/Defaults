@@ -71,6 +71,10 @@ struct ContentView: View {
         }
         .frame(minWidth: AppMetrics.minWindowWidth, minHeight: AppMetrics.minWindowHeight)
         .background(WindowBackdrop())
+        .sheet(isPresented: $appState.showAuthSheet) {
+            AuthSheet()
+                .environmentObject(appState)
+        }
         .onAppear {
             if selectedCommandID == nil {
                 selectedCommandID = commandsInCategory.first?.id
@@ -114,7 +118,7 @@ struct ContentView: View {
     @ViewBuilder
     private var detailPane: some View {
         if let command = selectedCommand {
-            CommandDetailView(command: command, authGranted: $appState.authGranted, onCopy: copyToClipboard)
+            CommandDetailView(command: command, onCopy: copyToClipboard)
                 .id(command.id)
         } else {
             ContentUnavailableView(

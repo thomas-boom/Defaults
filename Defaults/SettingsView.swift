@@ -71,11 +71,20 @@ struct PermissionsSettingsView: View {
                     ok: appState.authGranted
                 )
 
-                if !appState.authGranted {
+                if appState.authGranted {
+                    Button("Revoke Administrator Access") {
+                        appState.deauthorize()
+                    }
+                } else {
                     Button("Grant Administrator Access…") {
                         appState.requestAuth()
                     }
                 }
+
+                Text("Your password is requested once and cached, so changes can be applied without being asked again.")
+                    .font(.jb(10))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Section("Full Disk Access") {

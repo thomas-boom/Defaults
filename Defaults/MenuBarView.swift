@@ -29,7 +29,13 @@ struct MenuBarView: View {
 
         if !appState.authGranted {
             Button("Grant Administrator Access…") {
+                NSApp.activate(ignoringOtherApps: true)
+                openWindow(id: "main")
                 appState.requestAuth()
+            }
+        } else {
+            Button("Revoke Administrator Access") {
+                appState.deauthorize()
             }
         }
 

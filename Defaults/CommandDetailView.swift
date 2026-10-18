@@ -3,8 +3,8 @@ import AppKit
 
 struct CommandDetailView: View {
     let command: DefaultsCommand
-    @Binding var authGranted: Bool
     let onCopy: (String) -> Void
+    @EnvironmentObject private var appState: AppState
     
     @State private var selectedOptionID: UUID?
     @State private var hoveringTerminal = false
@@ -266,17 +266,6 @@ struct CommandDetailView: View {
         return commands
     }
     
-    private func runShell(_ shellCommand: String, withPrivileges: Bool, completion: @escaping (NSDictionary?) -> Void) {
-        let escaped = shellCommand
-            .replacingOccurrences(of: "\\", with: "\\\\")
-            .replacingOccurrences(of: "\"", with: "\\\"")
-        let suffix = withPrivileges ? " with administrator privileges" : ""
-        let script = "do shell script \"\(escaped)\"\(suffix)"
-        var error: NSDictionary?
-        NSAppleScript(source: script)?.executeAndReturnError(&error)
-        completion(error)
-    }
-    
     private func applyAndRestart() {
         guard let option = selectedOption else { return }
         let writeCmd = command.writeCommand(for: option)
@@ -289,19 +278,21 @@ struct CommandDetailView: View {
         let shellCmd = commands.joined(separator: "; ")
         let target = (command.restartApplication ?? "").lowercased()
         
-        runShell(shellCmd, withPrivileges: true) { error in
-            if let error = error {
-                let msg = error[NSAppleScript.errorMessage] as? String ?? "Unknown error"
-                authGranted = false
-                presentAlert(
-                    title: "Failed to apply change",
-                    message: "\(msg)\n\nThe command was copied to the clipboard:\n\(writeCmd)",
-                    style: .warning
-                )
-                return
-            }
-            
-            authGranted = true
+        switch appState.runPrivileged(shellCmd) {
+        case .needsAuthorization:
+            appState.requestAuth()
+            presentAlert(
+                title: "Authorization Required",
+                message: "Please authorize first, then press Apply & Restart again.\n\nThe command was copied to the clipboard:\n\(writeCmd)",
+                style: .warning
+            )
+        case .failure(let message):
+            presentAlert(
+                title: "Failed to apply change",
+                message: "\(message)\n\nThe command was copied to the clipboard:\n\(writeCmd)",
+                style: .warning
+            )
+        case .success:
             if target.contains("log out") {
                 presentAlert(
                     title: "Applied",
