@@ -4,30 +4,11 @@ struct WindowBackdrop: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                LinearGradient(
-                    stops: [
-                        .init(color: Color(hex: 0xF2E2BD), location: 0),
-                        .init(color: Color(hex: 0xF8EED8), location: 0.55),
-                        .init(color: Color(hex: 0xF3E6C6), location: 1)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                blob(Color(hex: 0xC8674A, alpha: 0.38), diameter: 460)
-                    .position(x: 150, y: 330)
-                blob(Color(hex: 0xD99A4E, alpha: 0.40), diameter: 420)
-                    .position(x: geo.size.width - 150, y: 130)
-                blob(Color(hex: 0x6FA287, alpha: 0.35), diameter: 480)
-                    .position(x: geo.size.width - 500, y: geo.size.height - 120)
+                Color.clear
                 HalftoneTexture()
             }
         }
         .ignoresSafeArea()
-    }
-    
-    private func blob(_ color: Color, diameter: CGFloat) -> some View {
-        RadialGradient(colors: [color, .clear], center: .center, startRadius: 0, endRadius: diameter / 2)
-            .frame(width: diameter, height: diameter)
     }
 }
 
