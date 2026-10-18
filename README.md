@@ -12,8 +12,10 @@
 </p>
 
 <p align="center">
-  <img src="Docs/screenshot.png" alt="Defaults: browsing the Dock commands" width="900">
+  <img src="Docs/screenshot.png" alt="Defaults browsing the Dock commands, with the Light/Dark and Terminal buttons in the toolbar" width="900">
 </p>
+
+<p align="center"><sub>Browsing the Dock commands — exact <code>defaults</code> command, a value picker, and <b>Apply &amp; Restart</b>. The detail pane fits without scrolling.</sub></p>
 
 ---
 
