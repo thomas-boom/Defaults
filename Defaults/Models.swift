@@ -86,6 +86,21 @@ enum DefaultsValueType: String, Codable {
     case float
     case string
     case enumType
+    
+    var displayName: String {
+        switch self {
+        case .bool:
+            return "Boolean"
+        case .int:
+            return "Integer"
+        case .float:
+            return "Float"
+        case .string:
+            return "String"
+        case .enumType:
+            return "Choice"
+        }
+    }
 }
 
 struct DefaultsOption: Identifiable, Codable, Hashable {
