@@ -102,7 +102,7 @@ struct CommandRowView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 8) {
                 Image(systemName: command.category.icon)
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(Color.accentColor)
                     .frame(width: 20)
                 Text(command.title)
                     .font(.headline)
@@ -227,5 +227,37 @@ struct CommandRowView: View {
         case .int, .float: return .purple
         case .string, .enumType: return .green
         }
+    }
+}
+
+struct CodeBlockView: View {
+    let command: String
+    let onCopy: (String) -> Void
+    
+    var body: some View {
+        HStack(alignment: .center, spacing: 4) {
+            Text(command)
+                .font(.system(.caption, design: .monospaced))
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Button(action: {
+                onCopy(command)
+            }) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption2)
+            }
+            .buttonStyle(.borderless)
+            .help("Copy to clipboard")
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .background(.background, in: RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .strokeBorder(.separator.opacity(0.3))
+        )
     }
 }
