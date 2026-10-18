@@ -26,10 +26,13 @@ struct InfoBar: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            appIcon(size: 18)
-            
-            Text(AppInfo.name)
-                .font(.jb(12, .semibold))
+            HStack(spacing: 4) {
+                Text(AppInfo.name)
+                    .font(.jb(12, .semibold))
+                Text(AppInfo.version)
+                    .font(.jb(10))
+                    .foregroundStyle(.secondary)
+            }
             
             Button {
                 showInfo.toggle()
