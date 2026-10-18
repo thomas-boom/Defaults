@@ -69,7 +69,7 @@ extension DefaultsCategory {
         switch self {
         case .dock, .finder, .missionControl, .dashboard, .menuBarClock, .screenshots:
             return .desktop
-        case .safari, .mail, .textEdit, .terminal, .xcode:
+        case .safari, .mail, .textEdit, .xcode:
             return .apps
         case .system, .keyboard, .loginWindow, .screensaver, .airDrop,
              .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore:
@@ -94,7 +94,6 @@ extension DefaultsCategory {
         case .diskUtility: return .orange
         case .softwareUpdate: return .green
         case .appStore: return .blue
-        case .terminal: return .green
         case .xcode: return .blue
         case .keyboard: return .gray
         case .loginWindow: return .indigo

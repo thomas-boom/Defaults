@@ -13,7 +13,6 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
     case safari
     case mail
     case textEdit
-    case terminal
     case xcode
     
     // System
@@ -41,7 +40,6 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .safari: return "Safari"
         case .mail: return "Mail"
         case .textEdit: return "TextEdit"
-        case .terminal: return "Terminal"
         case .xcode: return "Xcode"
         case .system: return "System (Global)"
         case .keyboard: return "Keyboard"
@@ -68,7 +66,6 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .safari: return "safari"
         case .mail: return "envelope"
         case .textEdit: return "doc.text"
-        case .terminal: return "terminal"
         case .xcode: return "hammer"
         case .system: return "desktopcomputer"
         case .keyboard: return "keyboard"
@@ -91,7 +88,6 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .safari: return "/Applications/Safari.app"
         case .mail: return "/System/Applications/Mail.app"
         case .textEdit: return "/System/Applications/TextEdit.app"
-        case .terminal: return "/System/Applications/Utilities/Terminal.app"
         case .xcode: return "/Applications/Xcode.app"
         case .diskUtility: return "/System/Applications/Utilities/Disk Utility.app"
         case .appStore: return "/System/Applications/App Store.app"

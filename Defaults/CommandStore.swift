@@ -747,22 +747,6 @@ struct CommandStore {
             restartApplication: nil
         ),
         
-        // MARK: Terminal
-        DefaultsCommand(
-            category: .terminal,
-            domain: "com.apple.Terminal",
-            key: "FocusFollowsMouse",
-            title: "Focus Follows Mouse",
-            summary: "Make windows active when mouse cursor moves over them (focus follows mouse)",
-            type: .bool,
-            options: [
-                DefaultsOption(value: "true", label: "Focus follows mouse", detail: "Window focus follows cursor"),
-                DefaultsOption(value: "false", label: "Click to focus", detail: "Click window to focus")
-            ],
-            default: "false",
-            restartApplication: "Terminal"
-        ),
-        
         // MARK: Xcode
         DefaultsCommand(
             category: .xcode,
@@ -879,6 +863,20 @@ struct CommandStore {
             ],
             default: "false",
             restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleFocusFollowsMouse",
+            title: "Focus Follows Mouse",
+            summary: "Make a window become active when the mouse cursor moves over it, without clicking",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Focus follows mouse", detail: "Window focus follows the cursor"),
+                DefaultsOption(value: "false", label: "Click to focus", detail: "Window focuses only when clicked")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
         ),
         
         // MARK: Keyboard
