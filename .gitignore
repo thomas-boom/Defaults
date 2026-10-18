@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate

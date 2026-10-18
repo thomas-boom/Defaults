@@ -7,6 +7,7 @@
   <img alt="Swift" src="https://img.shields.io/badge/Swift-5.0-orange">
   <img alt="Xcode" src="https://img.shields.io/badge/Xcode-27-blue">
   <img alt="Commands" src="https://img.shields.io/badge/commands-129-success">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
   <img alt="App Sandbox" src="https://img.shields.io/badge/sandbox-disabled-lightgrey">
 </p>
 
@@ -129,7 +130,9 @@ Defaults/                        repository root
 ├── Tools/
 │   └── GenerateAppIcon.swift    developer script, not part of the app
 ├── Defaults.xcodeproj
-└── README.md
+├── LICENSE
+├── README.md
+└── .gitignore
 ```
 
 `Tools/` and `Docs/` deliberately sit outside the app folder: the project uses a synchronized folder reference, so *everything* under `Defaults/` is compiled into the target.
@@ -157,4 +160,6 @@ Issues and pull requests are welcome. If a command is missing, outdated or gener
 
 ## License
 
-No license has been chosen for this repository yet. Until one is added, all rights are reserved by the author. If you'd like this published under MIT or another license, open an issue.
+Released under the [MIT License](LICENSE).
+
+Copyright © 2026 [Thomas Boom](https://github.com/thomasboom)
