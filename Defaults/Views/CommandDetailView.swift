@@ -42,7 +42,7 @@ struct CommandDetailView: View {
                 
                 optionsSection
                 
-                Text("Tip: copy a command and paste it into Terminal with ⌘V, or use the Terminal button in the lower-right corner to run it directly.")
+                Text("Tip: copy a command and paste it into Terminal with ⌘V, or click the Terminal icon in the toolbar to open Terminal.")
                     .font(.jb(10))
                     .foregroundStyle(.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
