@@ -139,18 +139,6 @@ struct CommandDetailView: View {
                     
                     Spacer(minLength: 0)
                     
-                    Button(action: {
-                        if let option = selectedOption {
-                            onCopy(command.writeCommand(for: option))
-                        }
-                    }) {
-                        Label("Copy", systemImage: "doc.on.doc")
-                            .font(.jb(11))
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .disabled(selectedOption == nil)
-                    
                     Button(action: applyAndRestart) {
                         Label("Apply & Restart", systemImage: "play.fill")
                             .font(.jb(11))

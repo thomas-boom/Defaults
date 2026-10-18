@@ -3,6 +3,8 @@ import AppKit
 
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .system
     @State private var sidebarSelection: SidebarItem? = .category(.dock)
     @State private var selectedCommandID: DefaultsCommand.ID?
     @State private var searchText = ""
@@ -104,6 +106,10 @@ struct ContentView: View {
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
+                themeToggle
+            }
+            ToolbarSpacer(.fixed)
+            ToolbarItem(placement: .primaryAction) {
                 terminalButton
             }
         }
@@ -143,15 +149,31 @@ struct ContentView: View {
             .transition(.move(edge: .top).combined(with: .opacity))
     }
     
-    /// Plain toolbar symbol that only brings Terminal forward; the command is
-    /// copied by hand with ⌘V, nothing is run here.
+    /// Opens Terminal.app (the command itself is copied by hand with ⌘V).
     private var terminalButton: some View {
-        Button(action: openTerminal) {
+        Button {
+            openTerminal()
+        } label: {
             Image(systemName: "terminal.fill")
                 .font(.system(size: 15, weight: .medium))
+                .frame(width: 22, height: 22)
         }
-        .buttonStyle(.plain)
         .help("Open Terminal")
+        .accessibilityLabel("Open Terminal")
+    }
+    
+    /// Quick dark/light toggle for the toolbar; the full System/Light/Dark
+    /// picker lives in Settings ▸ General.
+    private var themeToggle: some View {
+        Button {
+            toggleTheme()
+        } label: {
+            Image(systemName: colorScheme == .dark ? "sun.max" : "moon")
+                .font(.system(size: 15, weight: .medium))
+                .frame(width: 22, height: 22)
+        }
+        .help(colorScheme == .dark ? "Switch to Light Appearance" : "Switch to Dark Appearance")
+        .accessibilityLabel("Toggle Dark Mode")
     }
     
     // MARK: - Actions
@@ -177,6 +199,12 @@ struct ContentView: View {
     /// Opens Terminal.app only — no command is run for the user.
     private func openTerminal() {
         NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
+    }
+    
+    /// Flips between light and dark; picking it once leaves the System setting
+    /// behind, which can be restored in Settings ▸ General.
+    private func toggleTheme() {
+        appTheme = colorScheme == .dark ? .light : .dark
     }
     
 }

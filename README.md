@@ -33,10 +33,11 @@ Commands are based on [macos-defaults.com](https://macos-defaults.com).
 - **Value pickers** for every option a command supports (including `-array-add`)
 - **Live command preview** — the exact `defaults write …` text, selectable and one copy away
 - **Apply & Restart** — runs the change with elevated rights and relaunches the affected app (`killall Dock`, `killall Finder`, …)
-- **Run in Terminal** — hands the selected command to Terminal
+- **Open Terminal** — a toolbar button that brings Terminal forward, ready for **⌘V**
 - **Authorize once** — your password is validated and cached, so applying changes never prompts again while the app is running
 - **Risk warnings** for commands that need extra care
-- **Settings** with a System / Light / Dark theme switch and permission status
+- **Appearance** — a sun/moon toolbar toggle for quick Light / Dark switching
+- **Settings** with permission status and a System / Light / Dark theme picker
 - JetBrains Mono throughout, SF Symbols for every icon, and the real app icons for Safari, Mail, Disk Utility and friends
 
 ## Requirements
@@ -74,10 +75,12 @@ Pick a category in the sidebar, choose a command from the middle column, and rea
 
 ### Copy or run
 
-Each command offers two paths:
+Each command line in the detail pane has its own copy button:
 
-- **Copy** — puts `defaults write …` on the clipboard, ready to paste into Terminal with **⌘V**
-- **Run in Terminal** — the Terminal button copies the command and asks Terminal to run it
+- **Copy** — puts the `defaults write …` line on the clipboard, ready to paste into Terminal with **⌘V**
+- **Terminal** — the toolbar's Terminal button brings Terminal.app forward (the command is not run for you)
+
+The **Appearance** button next to it flips between Light and Dark; Settings ▸ General has the full System / Light / Dark picker.
 
 ### Apply & Restart
 
