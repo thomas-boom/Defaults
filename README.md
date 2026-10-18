@@ -6,9 +6,7 @@
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%2027%2B-black">
   <img alt="Swift" src="https://img.shields.io/badge/Swift-5.0-orange">
   <img alt="Xcode" src="https://img.shields.io/badge/Xcode-27-blue">
-  <img alt="Commands" src="https://img.shields.io/badge/commands-129-success">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
-  <img alt="App Sandbox" src="https://img.shields.io/badge/sandbox-disabled-lightgrey">
 </p>
 
 <p align="center">
