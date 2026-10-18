@@ -15,7 +15,7 @@ final class AppState: ObservableObject {
     /// Drives the in-app administrator password sheet.
     @Published var showAuthSheet = false
 
-    private var keepAliveTimer: Timer?
+    private var keepAliveTask: Task<Void, Never>?
 
     init() {
         refreshPermissions()
@@ -83,20 +83,22 @@ final class AppState: ObservableObject {
     /// app is running.
     private func startKeepAlive() {
         stopKeepAlive()
-        keepAliveTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                guard let self, self.authGranted else { return }
+        keepAliveTask = Task { @MainActor [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(60))
+                guard !Task.isCancelled, let self, self.authGranted else { return }
                 if self.runSudo(["-n", "-v"], password: nil).status != 0 {
                     self.authGranted = false
                     self.stopKeepAlive()
+                    return
                 }
             }
         }
     }
 
     private func stopKeepAlive() {
-        keepAliveTimer?.invalidate()
-        keepAliveTimer = nil
+        keepAliveTask?.cancel()
+        keepAliveTask = nil
     }
 
     // MARK: - Privileged execution
