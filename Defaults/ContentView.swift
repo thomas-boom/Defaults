@@ -2,12 +2,12 @@ import SwiftUI
 import AppKit
 
 struct ContentView: View {
+    @EnvironmentObject private var appState: AppState
     @State private var sidebarSelection: SidebarItem? = .category(.dock)
     @State private var selectedCommandID: DefaultsCommand.ID?
     @State private var searchText = ""
     @State private var showCopyToast = false
     @State private var toastResetTask: Task<Void, Never>?
-    @State private var authGranted = false
     
     private var selectedCategory: DefaultsCategory? {
         switch sidebarSelection {
@@ -48,9 +48,9 @@ struct ContentView: View {
         NavigationSplitView {
             SidebarView(
                 selection: $sidebarSelection,
-                authGranted: authGranted,
+                authGranted: appState.authGranted,
                 appVersion: appVersion,
-                onAuthorize: requestAuth
+                onAuthorize: appState.requestAuth
             )
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 260)
         } content: {
@@ -75,7 +75,6 @@ struct ContentView: View {
             if selectedCommandID == nil {
                 selectedCommandID = commandsInCategory.first?.id
             }
-            requestAuth()
         }
         .onChange(of: sidebarSelection) { _, _ in
             if let id = selectedCommandID,
@@ -101,8 +100,8 @@ struct ContentView: View {
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                if !authGranted {
-                    Button(action: requestAuth) {
+                if !appState.authGranted {
+                    Button(action: appState.requestAuth) {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundStyle(.red)
                     }
@@ -126,7 +125,7 @@ struct ContentView: View {
     @ViewBuilder
     private var detailPane: some View {
         if let command = selectedCommand {
-            CommandDetailView(command: command, authGranted: $authGranted, onCopy: copyToClipboard)
+            CommandDetailView(command: command, authGranted: $appState.authGranted, onCopy: copyToClipboard)
                 .id(command.id)
         } else {
             ContentUnavailableView(
@@ -166,12 +165,6 @@ struct ContentView: View {
         }
     }
     
-    private func requestAuth() {
-        let script = "do shell script \"true\" with administrator privileges"
-        var error: NSDictionary?
-        NSAppleScript(source: script)?.executeAndReturnError(&error)
-        authGranted = (error == nil)
-    }
 }
 
 struct CommandListRow: View {
@@ -207,4 +200,5 @@ struct CommandListRow: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppState())
 }
