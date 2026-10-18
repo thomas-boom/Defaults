@@ -7,7 +7,6 @@ struct CommandDetailView: View {
     @EnvironmentObject private var appState: AppState
     
     @State private var selectedOptionID: UUID?
-    @State private var hoveringTerminal = false
     /// Whether Apply & Restart is waiting for the password sheet to be
     /// accepted, so it can run on its own instead of asking for a second click.
     @State private var pendingApply = false
@@ -47,11 +46,6 @@ struct CommandDetailView: View {
                     .font(.jb(10))
                     .foregroundStyle(.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
-                
-                HStack(spacing: 0) {
-                    Spacer(minLength: 0)
-                    terminalButtonSmall
-                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -178,34 +172,6 @@ struct CommandDetailView: View {
                 }
             }
         }
-    }
-    
-    private var terminalButton: some View {
-        EmptyView()
-    }
-    
-    var terminalButtonSmall: some View {
-        Button(action: openInTerminal) {
-            Image(systemName: "terminal.fill")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.black)
-                .frame(width: 22, height: 22)
-                .background(Color.white, in: RoundedRectangle(cornerRadius: 6))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(Color.black.opacity(0.18), lineWidth: 1)
-                )
-        }
-        .buttonStyle(.plain)
-        .scaleEffect(hoveringTerminal ? 1.08 : 1.0)
-        .shadow(color: .black.opacity(hoveringTerminal ? 0.35 : 0.2),
-                radius: hoveringTerminal ? 4 : 2, y: 1)
-        .animation(.easeInOut(duration: 0.15), value: hoveringTerminal)
-        .onHover { isHovering in
-            hoveringTerminal = isHovering
-        }
-        .disabled(selectedOption == nil)
-        .help("Run the selected command in Terminal")
     }
     
     private func riskBanner(_ message: String) -> some View {
@@ -352,30 +318,6 @@ struct CommandDetailView: View {
         guard pendingApply else { return }
         pendingApply = false
         applyAndRestart()
-    }
-    
-    private func openInTerminal() {
-        guard let option = selectedOption else { return }
-        let cmd = command.writeCommand(for: option)
-        onCopy(cmd)
-        
-        let escaped = cmd
-            .replacingOccurrences(of: "\\", with: "\\\\")
-            .replacingOccurrences(of: "\"", with: "\\\"")
-        let script = """
-        tell application "Terminal"
-            activate
-            do script "\(escaped)"
-        end tell
-        """
-        var error: NSDictionary?
-        NSAppleScript(source: script)?.executeAndReturnError(&error)
-        
-        // If scripting refused, the command is already on the clipboard, so
-        // just bringing Terminal forward is enough.
-        if error != nil {
-            NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
-        }
     }
     
     private func presentAlert(title: String, message: String, style: NSAlert.Style) {

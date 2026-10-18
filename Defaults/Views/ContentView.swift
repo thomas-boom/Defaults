@@ -102,6 +102,11 @@ struct ContentView: View {
         .contentMargins(.bottom, 10, for: .scrollContent)
         .navigationTitle(selectedCategory?.displayName ?? "All Commands")
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                terminalButton
+            }
+        }
         .overlay {
             if commandsInCategory.isEmpty {
                 ContentUnavailableView(
@@ -138,6 +143,17 @@ struct ContentView: View {
             .transition(.move(edge: .top).combined(with: .opacity))
     }
     
+    /// Plain toolbar symbol that only brings Terminal forward; the command is
+    /// copied by hand with ⌘V, nothing is run here.
+    private var terminalButton: some View {
+        Button(action: openTerminal) {
+            Image(systemName: "terminal.fill")
+                .font(.system(size: 15, weight: .medium))
+        }
+        .buttonStyle(.plain)
+        .help("Open Terminal")
+    }
+    
     // MARK: - Actions
     
     private func copyToClipboard(_ string: String) {
@@ -156,6 +172,11 @@ struct ContentView: View {
                 showCopyToast = false
             }
         }
+    }
+    
+    /// Opens Terminal.app only — no command is run for the user.
+    private func openTerminal() {
+        NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
     }
     
 }
