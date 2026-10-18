@@ -74,8 +74,6 @@ extension DefaultsCategory {
         case .system, .keyboard, .loginWindow, .screensaver, .airDrop,
              .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore:
             return .system
-        case .dangerous:
-            return .system
         }
     }
     
@@ -104,7 +102,6 @@ extension DefaultsCategory {
         case .airDrop: return .cyan
         case .crashReporter: return .red
         case .dsStore: return .orange
-        case .dangerous: return .red
         }
     }
 }
