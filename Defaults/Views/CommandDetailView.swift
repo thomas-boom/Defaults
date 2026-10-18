@@ -8,6 +8,9 @@ struct CommandDetailView: View {
     
     @State private var selectedOptionID: UUID?
     @State private var hoveringTerminal = false
+    /// Whether Apply & Restart is waiting for the password sheet to be
+    /// accepted, so it can run on its own instead of asking for a second click.
+    @State private var pendingApply = false
     
     private var selectedOption: DefaultsOption? {
         if let id = selectedOptionID, let option = command.options.first(where: { $0.id == id }) {
@@ -53,6 +56,19 @@ struct CommandDetailView: View {
         .onAppear {
             if selectedOptionID == nil {
                 selectedOptionID = command.options.first?.id
+            }
+        }
+        .onChange(of: appState.showAuthSheet) { _, isShowing in
+            // The password sheet closed: retry if it was accepted, otherwise
+            // drop the command that was waiting to be applied.
+            guard !isShowing else { return }
+            guard appState.authGranted else {
+                pendingApply = false
+                return
+            }
+            // Let the sheet finish dismissing before running and reporting.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                resumePendingApply()
             }
         }
     }
@@ -286,7 +302,9 @@ struct CommandDetailView: View {
         
         switch appState.runPrivileged(shellCmd) {
         case .needsAuthorization:
-            // The password sheet is the only prompt: no additional alert.
+            // The password sheet is the only prompt; the command is then
+            // applied automatically through `resumePendingApply()`.
+            pendingApply = true
             appState.requestAuth()
         case .failure(let message):
             presentAlert(
@@ -321,6 +339,14 @@ struct CommandDetailView: View {
                 )
             }
         }
+    }
+    
+    /// Runs Apply & Restart again once the password sheet was accepted, so the
+    /// whole feature stays a single click.
+    private func resumePendingApply() {
+        guard pendingApply else { return }
+        pendingApply = false
+        applyAndRestart()
     }
     
     private func openInTerminal() {
