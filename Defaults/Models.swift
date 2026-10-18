@@ -163,9 +163,9 @@ struct DefaultsCommand: Identifiable, Codable, Hashable {
             return "defaults write \(domain) \(key) -float \(value)"
         case .string, .enumType:
             if value.contains(" ") {
-                return "defaults write \(domain) \(key> \"> -string \"\(value)\""
+                return "defaults write \(domain) \(key) -string \"\(value)\""
             } else {
-                return "defaults write \(domain> \"> \"> -string \(value)"
+                return "defaults write \(domain) \(key) -string \(value)"
             }
         }
     }
