@@ -127,15 +127,14 @@ Defaults/                        repository root
 │   └── Assets.xcassets          app icon
 ├── Docs/
 │   └── screenshot.png           image used by this README
-├── Tools/
-│   └── GenerateAppIcon.swift    developer script, not part of the app
 ├── Defaults.xcodeproj
 ├── LICENSE
 ├── README.md
-└── .gitignore
+├── .gitignore
+└── dist/                        local build output (ignored)
 ```
 
-`Tools/` and `Docs/` deliberately sit outside the app folder: the project uses a synchronized folder reference, so *everything* under `Defaults/` is compiled into the target.
+`Docs/` and `dist/` deliberately sit outside the app folder: the project uses a synchronized folder reference, so *everything* under `Defaults/` is compiled into the target, and build output must never end up inside it.
 
 ## Permissions and safety
 
