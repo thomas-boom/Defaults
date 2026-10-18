@@ -3,7 +3,10 @@ import SwiftUI
 @main struct MyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                WindowBackdrop()
+                ContentView()
+            }
         }
         .defaultSize(width: AppMetrics.defaultWindowWidth, height: AppMetrics.defaultWindowHeight)
     }

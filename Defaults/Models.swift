@@ -27,6 +27,7 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
     case diskUtility
     case softwareUpdate
     case appStore
+    case dangerous
     
     var id: String { rawValue }
     
@@ -53,6 +54,7 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .diskUtility: return "Disk Utility"
         case .softwareUpdate: return "Software Update"
         case .appStore: return "App Store"
+        case .dangerous: return "Dangerous"
         }
     }
     
@@ -77,9 +79,11 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .airDrop: return "dot.radiowaves.left.and.right"
         case .crashReporter: return "exclamationmark.triangle"
         case .dsStore: return "externaldrive"
-        case .diskUtility: return "harddrive"
+        case .diskUtility: return "externaldrive.fill"
         case .softwareUpdate: return "arrow.clockwise"
         case .appStore: return "bag"
+        case .dangerous: return "exclamationmark.shield"
+        case .safari: return "safari"
         }
     }
     

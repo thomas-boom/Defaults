@@ -53,17 +53,11 @@ struct ContentView: View {
                 onAuthorize: requestAuth
             )
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 260)
-            .padding(6)
         } content: {
             commandList
                 .navigationSplitViewColumnWidth(min: 190, ideal: 230, max: 320)
-                .padding(.top, 6)
-                .padding(.trailing, 6)
-                .padding(.bottom, 6)
         } detail: {
             detailPane
-                .padding(.vertical, 6)
-                .padding(.trailing, 6)
         }
         .navigationSplitViewStyle(.balanced)
         .font(.jb(AppMetrics.baseFontSize))
@@ -76,6 +70,7 @@ struct ContentView: View {
             InfoBar()
         }
         .frame(minWidth: AppMetrics.minWindowWidth, minHeight: AppMetrics.minWindowHeight)
+        .background(WindowBackdrop())
         .onAppear {
             if selectedCommandID == nil {
                 selectedCommandID = commandsInCategory.first?.id

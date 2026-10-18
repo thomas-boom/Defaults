@@ -49,11 +49,7 @@ struct CommandDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .contentMargins(.bottom, 10, for: .scrollContent)
-        .overlay(alignment: .bottomTrailing) {
-            terminalButton
-                .padding(.trailing, 14)
-                .padding(.bottom, 14)
-        }
+
         .onAppear {
             if selectedOptionID == nil {
                 selectedOptionID = command.options.first?.id
@@ -164,21 +160,25 @@ struct CommandDetailView: View {
     }
     
     private var terminalButton: some View {
+        EmptyView()
+    }
+    
+    var terminalButtonSmall: some View {
         Button(action: openInTerminal) {
             Image(systemName: "terminal.fill")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.white)
-                .frame(width: 34, height: 34)
-                .background(Color.black, in: RoundedRectangle(cornerRadius: 8))
+                .frame(width: 22, height: 22)
+                .background(Color.black, in: RoundedRectangle(cornerRadius: 6))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 6)
                         .strokeBorder(Color.white.opacity(0.18), lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)
         .scaleEffect(hoveringTerminal ? 1.08 : 1.0)
         .shadow(color: .black.opacity(hoveringTerminal ? 0.35 : 0.2),
-                radius: hoveringTerminal ? 6 : 3, y: 2)
+                radius: hoveringTerminal ? 4 : 2, y: 1)
         .animation(.easeInOut(duration: 0.15), value: hoveringTerminal)
         .onHover { isHovering in
             hoveringTerminal = isHovering

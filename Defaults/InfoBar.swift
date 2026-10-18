@@ -25,15 +25,11 @@ struct InfoBar: View {
     @State private var hovering = false
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             appIcon(size: 18)
             
             Text(AppInfo.name)
                 .font(.jb(12, .semibold))
-            
-            Text("v\(AppInfo.version)")
-                .font(.jb(10))
-                .foregroundStyle(.secondary)
             
             Button {
                 showInfo.toggle()
@@ -46,6 +42,8 @@ struct InfoBar: View {
             .popover(isPresented: $showInfo, arrowEdge: .top) {
                 infoPopover
             }
+            
+
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)

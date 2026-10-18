@@ -74,6 +74,8 @@ extension DefaultsCategory {
         case .system, .keyboard, .loginWindow, .screensaver, .airDrop,
              .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore:
             return .system
+        case .dangerous:
+            return .system
         }
     }
     
@@ -102,6 +104,7 @@ extension DefaultsCategory {
         case .airDrop: return .cyan
         case .crashReporter: return .red
         case .dsStore: return .orange
+        case .dangerous: return .red
         }
     }
 }
@@ -140,13 +143,7 @@ struct SidebarView: View {
             authorizeFooter
         }
         .frame(minWidth: 180, idealWidth: 200)
-        .background(.ultraThinMaterial)
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(.separator.opacity(0.25))
-        )
-        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+
     }
     
     @ViewBuilder
@@ -202,9 +199,7 @@ struct SidebarView: View {
                 Text(authGranted ? "Authorized" : "Authorize")
                     .font(.jb(11, .medium))
                 Spacer()
-                Text(appVersion)
-                    .font(.jb(9))
-                    .foregroundStyle(.tertiary)
+
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 7)
