@@ -67,7 +67,7 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .dashboard: return "rectangle.grid.2x2"
         case .menuBarClock: return "clock"
         case .screenshots: return "camera.viewfinder"
-        case .safari: return "compass"
+        case .safari: return "safari"
         case .mail: return "envelope"
         case .textEdit: return "doc.text"
         case .terminal: return "terminal"
@@ -83,7 +83,6 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .softwareUpdate: return "arrow.clockwise"
         case .appStore: return "bag"
         case .dangerous: return "exclamationmark.shield"
-        case .safari: return "safari"
         }
     }
     

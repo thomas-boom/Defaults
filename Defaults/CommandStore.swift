@@ -1134,6 +1134,133 @@ struct CommandStore {
             restartApplication: "SystemUIServer"
         ),
         DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "AppleShowAllFiles",
+            title: "Show Hidden Files",
+            summary: "Toggle visibility of hidden files (dotfiles) in Finder",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show", detail: "Show hidden files"),
+                DefaultsOption(value: "false", label: "Hide", detail: "Default behavior")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .menuBarClock,
+            domain: "com.apple.menuextra.clock",
+            key: "FlashDateSeparators",
+            title: "Flash Date Separators",
+            summary: "Flash the colon in the menu bar clock",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Flash", detail: "Colons blink"),
+                DefaultsOption(value: "false", label: "Don't flash", detail: "Static colons")
+            ],
+            default: "false",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .screenshots,
+            domain: "com.apple.screencapture",
+            key: "include-date",
+            title: "Include Date in Filename",
+            summary: "Include the current date in screenshot filenames",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Include date", detail: "Add date to filename"),
+                DefaultsOption(value: "false", label: "Omit date", detail: "Default naming")
+            ],
+            default: "true",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleInterfaceStyleSwitchesAutomatically",
+            title: "Auto Switch to Dark Mode",
+            summary: "Automatically toggle between light and dark appearance",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Auto-switch", detail: "Follow schedule"),
+                DefaultsOption(value: "false", label: "Manual", detail: "Fixed appearance")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleReduceMotion",
+            title: "Reduce Motion",
+            summary: "Minimize motion effects throughout the system",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Reduce motion", detail: "Fewer animations"),
+                DefaultsOption(value: "false", label: "Full motion", detail: "Default animations")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleReduceTransparency",
+            title: "Reduce Transparency",
+            summary: "Increase contrast by reducing transparency effects",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Reduce transparency", detail: "More opaque UI"),
+                DefaultsOption(value: "false", label: "Full transparency", detail: "Default effect")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "CGFontRenderingFontSmoothingDisabled",
+            title: "Disable Font Smoothing",
+            summary: "Turn off subpixel font rendering (antialiasing)",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Disabled", detail: "Sharper text in some cases"),
+                DefaultsOption(value: "false", label: "Enabled", detail: "Default smoothing")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps",
+            risk: "May affect text clarity; generally not recommended."
+        ),
+        DefaultsCommand(
+            category: .safari,
+            domain: "com.apple.Safari",
+            key: "WebKitDeveloperExtrasEnabled",
+            title: "Safari Developer Extras (WebKit1)",
+            summary: "Enable developer tools for Safari's WebKit engine",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable", detail: "Show Develop menu extras"),
+                DefaultsOption(value: "false", label: "Disable", detail: "Default")
+            ],
+            default: "false",
+            restartApplication: "Safari"
+        ),
+        DefaultsCommand(
+            category: .safari,
+            domain: "com.apple.Safari",
+            key: "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled",
+            title: "Safari Developer Extras (WebKit2)",
+            summary: "Enable developer extras for WebKit2 processes",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable", detail: "Enable WebKit2 dev extras"),
+                DefaultsOption(value: "false", label: "Disable", detail: "Default")
+            ],
+            default: "false",
+            restartApplication: "Safari"
+        ),
+        DefaultsCommand(
             category: .screenshots,
             domain: "com.apple.screencapture",
             key: "type",
