@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Centralized typography. The app uses JetBrains Mono everywhere.
-/// The font is resolved by family name; if it is not installed the system
-/// falls back to the default monospaced-ish font automatically.
+/// Centralized typography. The app uses JetBrains Mono everywhere: the font
+/// files ship inside the app bundle (`Defaults/Fonts/`) and are registered at
+/// launch by `BundledFonts.register()`, so nothing has to be installed.
 extension Font {
     static func jb(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         .custom("JetBrains Mono", size: size).weight(weight)

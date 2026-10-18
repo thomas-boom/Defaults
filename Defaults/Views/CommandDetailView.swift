@@ -19,39 +19,15 @@ struct CommandDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                header
-                
-                if let risk = command.risk {
-                    riskBanner(risk)
-                }
-                
-                infoGrid
-                
-                section(title: "What it does") {
-                    Text(command.summary)
-                        .font(.jb(12))
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                
-                section(title: "Read Command") {
-                    CodeBlockView(command: command.readCommand(), onCopy: onCopy)
-                }
-                
-                optionsSection
-                
-                Text("Tip: copy a command and paste it into Terminal with ⌘V, or click the Terminal icon in the toolbar to open Terminal.")
-                    .font(.jb(10))
-                    .foregroundStyle(.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
+        // The detail pane does not scroll: the content fits on a normal window,
+        // so only very small windows fall back to a scroll view.
+        ViewThatFits(in: .vertical) {
+            detailContent
+            ScrollView {
+                detailContent
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentMargins(.bottom, 10, for: .scrollContent)
         }
-        .contentMargins(.bottom, 10, for: .scrollContent)
-
         .onAppear {
             if selectedOptionID == nil {
                 selectedOptionID = command.options.first?.id
@@ -73,6 +49,42 @@ struct CommandDetailView: View {
     }
     
     // MARK: - Sections
+    
+    /// The whole pane, top-aligned. Shared by both `ViewThatFits` alternatives
+    /// so scrolling never changes the layout.
+    private var detailContent: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            header
+            
+            if let risk = command.risk {
+                riskBanner(risk)
+            }
+            
+            infoGrid
+            
+            section(title: "What it does") {
+                Text(command.summary)
+                    .font(.jb(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            
+            section(title: "Read Command") {
+                CodeBlockView(command: command.readCommand(), onCopy: onCopy)
+            }
+            
+            optionsSection
+            
+            Text("Tip: copy a command and paste it into Terminal with ⌘V, or click the Terminal icon in the toolbar to open Terminal.")
+                .font(.jb(10))
+                .foregroundStyle(.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer(minLength: 0)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
     
     private var header: some View {
         HStack(alignment: .center, spacing: 10) {

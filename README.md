@@ -38,7 +38,7 @@ Commands are based on [macos-defaults.com](https://macos-defaults.com).
 - **Risk warnings** for commands that need extra care
 - **Appearance** — a sun/moon toolbar toggle for quick Light / Dark switching
 - **Settings** with permission status and a System / Light / Dark theme picker
-- JetBrains Mono throughout, SF Symbols for every icon, and the real app icons for Safari, Mail, Disk Utility and friends
+- **Bundled JetBrains Mono** — the font ships inside the app and is registered at launch, so the interface never falls back to a system font; SF Symbols for every icon, and the real app icons for Safari, Mail, Disk Utility and friends
 
 ## Requirements
 
@@ -47,7 +47,7 @@ Commands are based on [macos-defaults.com](https://macos-defaults.com).
 | macOS | **27.0 or later** (deployment target) |
 | Building | Xcode 27 or newer |
 | Rights | an **administrator** account to apply changes — Full Disk Access is *not* needed |
-| Font | JetBrains Mono (optional — falls back to a system monospaced font) |
+| Font | none — JetBrains Mono 2.304 is bundled inside the app ([SIL OFL](Docs/JetBrainsMono-OFL.txt)) |
 
 ## Installation
 
@@ -72,6 +72,8 @@ The project uses a *synchronized folder reference*, so every file under `Default
 ### Browse
 
 Pick a category in the sidebar, choose a command from the middle column, and read the details on the right. Use the sidebar's **All Commands** entry with the search field in the toolbar to find something specific.
+
+The detail pane is laid out to fit without scrolling: the sections stay put and only the middle column scrolls. On a deliberately tiny window it falls back to a scroll view so nothing becomes unreachable.
 
 ### Copy or run
 
@@ -114,7 +116,13 @@ Defaults/                        repository root
 │   ├── App/
 │   │   ├── MyApp.swift          @main, WindowGroup + Settings scenes
 │   │   ├── AppState.swift       authorization, privileged execution, user rights
+│   │   ├── BundledFonts.swift   registers the bundled fonts for this process
 │   │   └── Theme.swift          JetBrains Mono helper + window metrics
+│   ├── Fonts/                   JetBrains Mono files copied into the app bundle
+│   │   ├── JetBrainsMono-Regular.ttf
+│   │   ├── JetBrainsMono-Medium.ttf
+│   │   ├── JetBrainsMono-SemiBold.ttf
+│   │   └── JetBrainsMono-Bold.ttf
 │   ├── Models/
 │   │   ├── Models.swift         DefaultsCommand, options, categories, value types
 │   │   └── CommandStore.swift   the command catalog
@@ -129,7 +137,8 @@ Defaults/                        repository root
 │   │   └── WindowBackdrop.swift
 │   └── Assets.xcassets          app icon
 ├── Docs/
-│   └── screenshot.png           image used by this README
+│   ├── screenshot.png           image used by this README
+│   └── JetBrainsMono-OFL.txt    license of the bundled font
 ├── Defaults.xcodeproj
 ├── LICENSE
 ├── README.md
@@ -149,7 +158,7 @@ Defaults/                        repository root
 
 ## Development
 
-Everything is plain SwiftUI with no third-party dependencies. The source is laid out in `App/`, `Models/` and `Views/`, and the project needs no edits when files move — the folder reference picks them up.
+Everything is plain SwiftUI with no third-party dependencies — the only third-party asset is the bundled JetBrains Mono font. The source is laid out in `App/`, `Models/`, `Views/` and `Fonts/`, and the project needs no edits when files move — the folder reference picks them up and copies the fonts into the app bundle.
 
 ```bash
 # Debug build
@@ -163,5 +172,7 @@ Issues and pull requests are welcome. If a command is missing, outdated or gener
 ## License
 
 Released under the [MIT License](LICENSE).
+
+The app bundles **JetBrains Mono 2.304** (`Defaults/Fonts/`), © 2020 The JetBrains Mono Project Authors, licensed under the [SIL Open Font License 1.1](Docs/JetBrainsMono-OFL.txt). It is registered for the app's own process only — nothing is installed system-wide.
 
 Copyright © 2026 [Thomas Boom](https://github.com/thomas-boom)
