@@ -76,18 +76,6 @@ struct PermissionsSettingsView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Section("Terminal") {
-                statusLine(
-                    title: "Run in Terminal",
-                    detail: "Uses your normal user account",
-                    ok: true
-                )
-                Text("Terminal is opened only to run a copied command. It uses your regular account, so it does not need additional rights unless you run sudo yourself.")
-                    .font(.jb(10))
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
             Section {
                 Button("Check Permissions Again") {
                     appState.refreshPermissions()
