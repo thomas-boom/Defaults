@@ -2,12 +2,21 @@ import SwiftUI
 import AppKit
 
 struct ContentView: View {
-    @State private var selectedCategory: DefaultsCategory? = .dock
+    @State private var sidebarSelection: SidebarItem? = .category(.dock)
     @State private var selectedCommandID: DefaultsCommand.ID?
     @State private var searchText = ""
     @State private var showCopyToast = false
     @State private var toastResetTask: Task<Void, Never>?
     @State private var authGranted = false
+    
+    private var selectedCategory: DefaultsCategory? {
+        switch sidebarSelection {
+        case .category(let category):
+            return category
+        case .all, .none:
+            return nil
+        }
+    }
     
     private var commandsInCategory: [DefaultsCommand] {
         CommandStore.allCommands
@@ -21,6 +30,11 @@ struct ContentView: View {
         return CommandStore.allCommands.first { $0.id == id }
     }
     
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        return "v\(version)"
+    }
+    
     private func matchesSearch(_ command: DefaultsCommand) -> Bool {
         guard !searchText.isEmpty else { return true }
         let query = searchText.lowercased()
@@ -32,35 +46,34 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            sidebar
+            SidebarView(
+                selection: $sidebarSelection,
+                authGranted: authGranted,
+                appVersion: appVersion,
+                onAuthorize: requestAuth
+            )
+            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 260)
         } content: {
             commandList
+                .navigationSplitViewColumnWidth(min: 190, ideal: 230, max: 320)
         } detail: {
             detailPane
         }
         .navigationSplitViewStyle(.balanced)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button(action: requestAuth) {
-                    Label(authGranted ? "Access Granted" : "Request Access",
-                          systemImage: authGranted ? "lock.open.fill" : "lock.shield")
-                }
-                .help("Authorize once so system processes can be restarted without repeated prompts")
-            }
-        }
+        .font(.jb(AppMetrics.baseFontSize))
         .overlay(alignment: .top) {
             if showCopyToast {
                 copyToast
             }
         }
-        .frame(minWidth: 900, minHeight: 560)
+        .frame(minWidth: AppMetrics.minWindowWidth, minHeight: AppMetrics.minWindowHeight)
         .onAppear {
             if selectedCommandID == nil {
                 selectedCommandID = commandsInCategory.first?.id
             }
             requestAuth()
         }
-        .onChange(of: selectedCategory) { _, _ in
+        .onChange(of: sidebarSelection) { _, _ in
             if let id = selectedCommandID,
                !commandsInCategory.contains(where: { $0.id == id }) {
                 selectedCommandID = commandsInCategory.first?.id
@@ -70,49 +83,17 @@ struct ContentView: View {
         }
     }
     
-    // MARK: - Sidebar
-    
-    private var sidebar: some View {
-        List(selection: $selectedCategory) {
-            Label("All Commands", systemImage: "square.grid.2x2")
-                .tag(DefaultsCategory?.none)
-            
-            Section("Categories") {
-                ForEach(DefaultsCategory.allCases) { category in
-                    Label {
-                        HStack {
-                            Text(category.displayName)
-                            Spacer()
-                            Text("\(count(for: category))")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                    } icon: {
-                        Image(systemName: category.icon)
-                    }
-                    .tag(Optional(category))
-                }
-            }
-        }
-        .listStyle(.sidebar)
-        .navigationTitle("Defaults")
-    }
-    
-    private func count(for category: DefaultsCategory) -> Int {
-        CommandStore.allCommands.filter { $0.category == category }.count
-    }
-    
     // MARK: - Command List
     
     private var commandList: some View {
         List(selection: $selectedCommandID) {
             ForEach(commandsInCategory) { command in
                 CommandListRow(command: command)
-                    .tag(Optional(command.id))
+                    .tag(command.id)
             }
         }
         .navigationTitle(selectedCategory?.displayName ?? "All Commands")
-        .searchable(text: $searchText, placement: .toolbar, prompt: "Search commands")
+        .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
         .overlay {
             if commandsInCategory.isEmpty {
                 ContentUnavailableView(
@@ -135,16 +116,16 @@ struct ContentView: View {
             ContentUnavailableView(
                 "Select a Command",
                 systemImage: "sidebar.right",
-                description: Text("Choose a command from the list to view its details, options, and run it in Terminal")
+                description: Text("Choose a command to view its details and run it in Terminal")
             )
         }
     }
     
     private var copyToast: some View {
         Text("Copied to clipboard")
-            .font(.caption)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
+            .font(.jb(11))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             .background(.thinMaterial, in: Capsule())
             .transition(.move(edge: .top).combined(with: .opacity))
     }
@@ -181,24 +162,24 @@ struct CommandListRow: View {
     let command: DefaultsCommand
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             Image(systemName: command.category.icon)
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 22)
+                .font(.system(size: 12))
+                .foregroundStyle(command.category.accentColor)
+                .frame(width: 18)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(command.title)
-                    .font(.body)
+                    .font(.jb(12, .medium))
                     .lineLimit(1)
                 Text("\(command.domain) \(command.key)")
-                    .font(.caption2)
-                    .monospaced()
+                    .font(.jb(9))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 1)
     }
 }
 

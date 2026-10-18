@@ -5,5 +5,6 @@ import SwiftUI
         WindowGroup {
             ContentView()
         }
+        .defaultSize(width: AppMetrics.defaultWindowWidth, height: AppMetrics.defaultWindowHeight)
     }
 }

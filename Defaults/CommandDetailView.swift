@@ -17,13 +17,13 @@ struct CommandDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 14) {
                 header
                 infoGrid
                 
                 section(title: "What it does") {
                     Text(command.summary)
-                        .font(.body)
+                        .font(.jb(12))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -35,16 +35,16 @@ struct CommandDetailView: View {
                 optionsSection
                 
                 Text("Tip: copy a command and paste it into Terminal with ⌘V, or use the Terminal button in the lower-right corner to run it directly.")
-                    .font(.caption)
+                    .font(.jb(10))
                     .foregroundStyle(.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(20)
+            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .overlay(alignment: .bottomTrailing) {
             terminalButton
-                .padding(20)
+                .padding(14)
         }
         .onAppear {
             if selectedOptionID == nil {
@@ -56,18 +56,17 @@ struct CommandDetailView: View {
     // MARK: - Sections
     
     private var header: some View {
-        HStack(alignment: .center, spacing: 12) {
+        HStack(alignment: .center, spacing: 10) {
             Image(systemName: command.category.icon)
-                .font(.title2)
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 32)
+                .font(.system(size: 18))
+                .foregroundStyle(command.category.accentColor)
+                .frame(width: 26)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(command.title)
-                    .font(.title2)
-                    .bold()
+                    .font(.jb(17, .bold))
                 Text(command.category.displayName)
-                    .font(.subheadline)
+                    .font(.jb(10))
                     .foregroundStyle(.secondary)
             }
             
@@ -78,7 +77,7 @@ struct CommandDetailView: View {
     }
     
     private var infoGrid: some View {
-        Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 10) {
+        Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
             GridRow {
                 infoLabel("Domain")
                 infoValue(command.domain)
@@ -98,8 +97,8 @@ struct CommandDetailView: View {
                 infoValue(reloadRequirement)
             }
         }
-        .padding(12)
-        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
+        .padding(10)
+        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
     }
     
     private var reloadRequirement: String {
@@ -111,39 +110,44 @@ struct CommandDetailView: View {
     
     private var optionsSection: some View {
         section(title: "Adjustable Options") {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 8) {
                     Picker("Option", selection: $selectedOptionID) {
                         ForEach(command.options) { option in
                             Text(option.label).tag(Optional(option.id))
                         }
                     }
                     .pickerStyle(.menu)
-                    .frame(minWidth: 220)
+                    .font(.jb(11))
+                    .frame(minWidth: 180, maxWidth: 260)
                     
-                    Spacer()
+                    Spacer(minLength: 0)
                     
                     Button(action: {
                         if let option = selectedOption {
                             onCopy(command.writeCommand(for: option))
                         }
                     }) {
-                        Label("Copy Command", systemImage: "doc.on.doc")
+                        Label("Copy", systemImage: "doc.on.doc")
+                            .font(.jb(11))
                     }
                     .buttonStyle(.bordered)
+                    .controlSize(.small)
                     .disabled(selectedOption == nil)
                     
                     Button(action: applyAndRestart) {
                         Label("Apply & Restart", systemImage: "play.fill")
+                            .font(.jb(11))
                     }
                     .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
                     .disabled(selectedOption == nil)
                 }
                 
                 if let option = selectedOption {
                     if let detail = option.detail {
                         Text(detail)
-                            .font(.caption)
+                            .font(.jb(10))
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -156,19 +160,13 @@ struct CommandDetailView: View {
     
     private var terminalButton: some View {
         Button(action: openInTerminal) {
-            VStack(spacing: 4) {
-                Image(systemName: "terminal.fill")
-                    .font(.title2)
-                Text("Terminal")
-                    .font(.caption2)
-                    .bold()
-            }
-            .frame(width: 66, height: 56)
+            Image(systemName: "terminal.fill")
+                .font(.system(size: 12))
         }
         .buttonStyle(.borderedProminent)
-        .controlSize(.large)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .shadow(radius: 4, y: 2)
+        .controlSize(.small)
+        .buttonBorderShape(.circle)
+        .shadow(radius: 2, y: 1)
         .disabled(selectedOption == nil)
         .help("Run the selected command in Terminal")
     }
@@ -177,22 +175,21 @@ struct CommandDetailView: View {
     
     private func infoLabel(_ text: String) -> some View {
         Text(text)
-            .font(.caption)
+            .font(.jb(10))
             .foregroundStyle(.secondary)
     }
     
     private func infoValue(_ text: String) -> some View {
         Text(text)
-            .font(.caption)
-            .monospaced()
+            .font(.jb(10))
             .textSelection(.enabled)
     }
     
     private var typeBadge: some View {
         Text(command.type.displayName)
-            .font(.caption2)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
+            .font(.jb(9, .medium))
+            .padding(.horizontal, 7)
+            .padding(.vertical, 2)
             .background(typeColor.opacity(0.15), in: Capsule())
             .foregroundStyle(typeColor)
     }
@@ -210,9 +207,9 @@ struct CommandDetailView: View {
     
     @ViewBuilder
     private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.headline)
+                .font(.jb(12, .semibold))
             content()
         }
     }
@@ -340,12 +337,10 @@ struct CodeBlockView: View {
     let command: String
     let onCopy: (String) -> Void
     
-    @State private var hovered = false
-    
     var body: some View {
-        HStack(alignment: .center, spacing: 8) {
+        HStack(alignment: .center, spacing: 6) {
             Text(command)
-                .font(.system(.callout, design: .monospaced))
+                .font(.jb(11))
                 .lineLimit(1)
                 .truncationMode(.middle)
                 .textSelection(.enabled)
@@ -355,15 +350,16 @@ struct CodeBlockView: View {
                 onCopy(command)
             }) {
                 Image(systemName: "doc.on.doc")
+                    .font(.system(size: 11))
             }
             .buttonStyle(.borderless)
             .help("Copy to clipboard (then paste in Terminal with ⌘V)")
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(.background, in: RoundedRectangle(cornerRadius: 8))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .background(.background, in: RoundedRectangle(cornerRadius: 6))
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 6)
                 .strokeBorder(.separator.opacity(0.4))
         )
     }
