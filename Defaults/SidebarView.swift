@@ -69,10 +69,11 @@ extension DefaultsCategory {
         switch self {
         case .dock, .finder, .missionControl, .dashboard, .menuBarClock, .screenshots:
             return .desktop
-        case .safari, .mail, .textEdit, .xcode:
+        case .safari, .mail, .messages, .music, .textEdit, .xcode, .activityMonitor, .simulator:
             return .apps
-        case .system, .keyboard, .loginWindow, .screensaver, .airDrop,
-             .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore:
+        case .system, .keyboard, .mouse, .trackpad, .loginWindow, .screensaver, .airDrop,
+             .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore,
+             .timeMachine, .feedbackAssistant:
             return .system
         }
     }
@@ -95,6 +96,14 @@ extension DefaultsCategory {
         case .softwareUpdate: return .green
         case .appStore: return .blue
         case .xcode: return .blue
+        case .messages: return .green
+        case .music: return .pink
+        case .activityMonitor: return .mint
+        case .simulator: return .indigo
+        case .mouse: return .gray
+        case .trackpad: return .gray
+        case .timeMachine: return .teal
+        case .feedbackAssistant: return .yellow
         case .keyboard: return .gray
         case .loginWindow: return .indigo
         case .screensaver: return .mint

@@ -64,7 +64,7 @@ struct CommandStore {
             restartApplication: nil
         ),
         DefaultsCommand(
-            category: .system,
+            category: .mouse,
             domain: "-g",
             key: "com.apple.mouse.scaling",
             title: "Mouse Tracking Speed",
@@ -80,7 +80,7 @@ struct CommandStore {
             restartApplication: nil
         ),
         DefaultsCommand(
-            category: .system,
+            category: .trackpad,
             domain: "-g",
             key: "com.apple.trackpad.scaling",
             title: "Trackpad Tracking Speed",
@@ -613,7 +613,7 @@ struct CommandStore {
         DefaultsCommand(
             category: .missionControl,
             domain: "com.apple.dock",
-            key: "expose-group-by-app",
+            key: "expose-group-apps",
             title: "Group Windows by App in Mission Control",
             summary: "Show windows grouped by application in Mission Control",
             type: .bool,
@@ -627,15 +627,15 @@ struct CommandStore {
         DefaultsCommand(
             category: .missionControl,
             domain: "com.apple.spaces",
-            key: "displays-have-separate-spaces",
+            key: "spans-displays",
             title: "Displays Have Separate Spaces",
             summary: "When enabled, each display gets its own set of Spaces (requires logout)",
             type: .bool,
             options: [
-                DefaultsOption(value: "true", label: "Separate Spaces per display", detail: "Each monitor has independent Spaces"),
-                DefaultsOption(value: "false", label: "Shared Spaces", detail: "Spaces span all displays")
+                DefaultsOption(value: "false", label: "Separate Spaces per display", detail: "Each monitor has independent Spaces"),
+                DefaultsOption(value: "true", label: "Shared Spaces", detail: "Spaces span all displays")
             ],
-            default: "true",
+            default: "false",
             restartApplication: "Log out"
         ),
         
@@ -864,20 +864,6 @@ struct CommandStore {
             default: "false",
             restartApplication: nil
         ),
-        DefaultsCommand(
-            category: .system,
-            domain: "-g",
-            key: "AppleFocusFollowsMouse",
-            title: "Focus Follows Mouse",
-            summary: "Make a window become active when the mouse cursor moves over it, without clicking",
-            type: .bool,
-            options: [
-                DefaultsOption(value: "true", label: "Focus follows mouse", detail: "Window focus follows the cursor"),
-                DefaultsOption(value: "false", label: "Click to focus", detail: "Window focuses only when clicked")
-            ],
-            default: "false",
-            restartApplication: "Relaunch apps"
-        ),
         
         // MARK: Keyboard
         DefaultsCommand(
@@ -898,7 +884,7 @@ struct CommandStore {
         ),
         DefaultsCommand(
             category: .keyboard,
-            domain: "com.apple.HIToolbox",
+            domain: "-g",
             key: "AppleKeyboardUIMode",
             title: "Full Keyboard Access",
             summary: "Tab through all controls, not just text fields",
@@ -1130,20 +1116,6 @@ struct CommandStore {
             ],
             default: "~/Desktop",
             restartApplication: "SystemUIServer"
-        ),
-        DefaultsCommand(
-            category: .finder,
-            domain: "com.apple.finder",
-            key: "AppleShowAllFiles",
-            title: "Show Hidden Files",
-            summary: "Toggle visibility of hidden files (dotfiles) in Finder",
-            type: .bool,
-            options: [
-                DefaultsOption(value: "true", label: "Show", detail: "Show hidden files"),
-                DefaultsOption(value: "false", label: "Hide", detail: "Default behavior")
-            ],
-            default: "false",
-            restartApplication: "Finder"
         ),
         DefaultsCommand(
             category: .menuBarClock,
@@ -1466,6 +1438,512 @@ struct CommandStore {
             ],
             default: "false",
             restartApplication: "Dock"
+        ),
+        
+        // MARK: Mouse
+        DefaultsCommand(
+            category: .mouse,
+            domain: "com.apple.Terminal",
+            key: "FocusFollowsMouse",
+            title: "Focus Follows Mouse",
+            summary: "Focus Terminal windows when the mouse cursor hovers over them (only works between Terminal windows)",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Focus follows mouse", detail: "Terminal window focus follows the cursor"),
+                DefaultsOption(value: "false", label: "Click to focus", detail: "Click a Terminal window to focus it")
+            ],
+            default: "false",
+            restartApplication: "Terminal"
+        ),
+        DefaultsCommand(
+            category: .mouse,
+            domain: "-g",
+            key: "com.apple.mouse.linear",
+            title: "Disable Mouse Acceleration",
+            summary: "Turn off pointer acceleration so the cursor moves at a constant rate",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Linear (no acceleration)", detail: "Constant pointer speed"),
+                DefaultsOption(value: "false", label: "Accelerated", detail: "Default macOS acceleration")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        
+        // MARK: Trackpad
+        DefaultsCommand(
+            category: .trackpad,
+            domain: "com.apple.AppleMultitouchTrackpad",
+            key: "Dragging",
+            title: "Dragging",
+            summary: "Tap and drag with one finger without holding the trackpad button",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable dragging", detail: "Double-tap and drag"),
+                DefaultsOption(value: "false", label: "Off", detail: "Use the trackpad button or a click")
+            ],
+            default: "false",
+            restartApplication: nil,
+            risk: "Mutually exclusive with Drag Lock and three-finger drag; enabling one disables the others."
+        ),
+        DefaultsCommand(
+            category: .trackpad,
+            domain: "com.apple.AppleMultitouchTrackpad",
+            key: "DragLock",
+            title: "Dragging with Drag Lock",
+            summary: "Keep dragging after you lift your finger, until you tap again",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Drag lock", detail: "Stay in drag mode after lifting"),
+                DefaultsOption(value: "false", label: "Off", detail: "Stop dragging when you lift")
+            ],
+            default: "false",
+            restartApplication: nil,
+            risk: "Mutually exclusive with Dragging and three-finger drag."
+        ),
+        DefaultsCommand(
+            category: .trackpad,
+            domain: "com.apple.AppleMultitouchTrackpad",
+            key: "TrackpadThreeFingerDrag",
+            title: "Dragging with Three Fingers",
+            summary: "Move the pointer and drag using three fingers",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Three-finger drag", detail: "Drag with three fingers"),
+                DefaultsOption(value: "false", label: "Off", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: nil,
+            risk: "Mutually exclusive with Dragging and Drag Lock."
+        ),
+        DefaultsCommand(
+            category: .trackpad,
+            domain: "com.apple.AppleMultitouchTrackpad",
+            key: "FirstClickThreshold",
+            title: "Click Weight (Threshold)",
+            summary: "How firmly you must press for the trackpad to register a click",
+            type: .int,
+            options: [
+                DefaultsOption(value: "0", label: "Light", detail: "Lightest click force"),
+                DefaultsOption(value: "1", label: "Medium", detail: "Default click force"),
+                DefaultsOption(value: "2", label: "Firm", detail: "Harder click force")
+            ],
+            default: "1",
+            restartApplication: nil
+        ),
+        
+        // MARK: Activity Monitor
+        DefaultsCommand(
+            category: .activityMonitor,
+            domain: "com.apple.ActivityMonitor",
+            key: "UpdatePeriod",
+            title: "Update Frequency",
+            summary: "How often Activity Monitor refreshes its data, in seconds",
+            type: .int,
+            options: [
+                DefaultsOption(value: "1", label: "1 second", detail: "Update every second"),
+                DefaultsOption(value: "2", label: "2 seconds", detail: "Update every 2 seconds"),
+                DefaultsOption(value: "5", label: "5 seconds", detail: "Update every 5 seconds")
+            ],
+            default: "5",
+            restartApplication: "Activity Monitor"
+        ),
+        DefaultsCommand(
+            category: .activityMonitor,
+            domain: "com.apple.ActivityMonitor",
+            key: "IconType",
+            title: "Dock Icon Type",
+            summary: "Choose what the Activity Monitor Dock icon shows",
+            type: .int,
+            options: [
+                DefaultsOption(value: "0", label: "Application icon", detail: "Standard app icon"),
+                DefaultsOption(value: "2", label: "CPU usage", detail: "Live CPU graph"),
+                DefaultsOption(value: "3", label: "CPU history", detail: "CPU usage over time"),
+                DefaultsOption(value: "5", label: "Network usage", detail: "Live network graph"),
+                DefaultsOption(value: "6", label: "Disk activity", detail: "Live disk activity graph")
+            ],
+            default: "0",
+            restartApplication: "Activity Monitor"
+        ),
+        
+        // MARK: Simulator
+        DefaultsCommand(
+            category: .simulator,
+            domain: "com.apple.iphonesimulator",
+            key: "ScreenShotSaveLocation",
+            title: "Screenshot Location",
+            summary: "Folder where Simulator screenshots are saved (the folder must already exist)",
+            type: .string,
+            options: [
+                DefaultsOption(value: "~/Pictures/Screenshots", label: "~/Pictures/Screenshots", detail: "Shared screenshots folder"),
+                DefaultsOption(value: "~/Pictures/Simulator Screenshots", label: "~/Pictures/Simulator Screenshots", detail: "Dedicated Simulator folder")
+            ],
+            default: nil,
+            restartApplication: "Simulator"
+        ),
+        
+        // MARK: Messages
+        DefaultsCommand(
+            category: .messages,
+            domain: "com.apple.MobileSMS",
+            key: "MMSShowSubject",
+            title: "Show Subject Field",
+            summary: "Show a subject field above the message field in Messages",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show subject field", detail: "Display the subject line"),
+                DefaultsOption(value: "false", label: "Hide subject field", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Messages"
+        ),
+        
+        // MARK: Music
+        DefaultsCommand(
+            category: .music,
+            domain: "com.apple.Music",
+            key: "userWantsPlaybackNotifications",
+            title: "Song Change Notifications",
+            summary: "Show a notification when a new song starts playing in Music",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show notifications", detail: "Notify on each new song"),
+                DefaultsOption(value: "false", label: "Don't notify", detail: "Silent track changes")
+            ],
+            default: "true",
+            restartApplication: "Music"
+        ),
+        
+        // MARK: TextEdit — additional
+        DefaultsCommand(
+            category: .textEdit,
+            domain: "com.apple.TextEdit",
+            key: "SmartQuotes",
+            title: "Smart Quotes",
+            summary: "Automatically convert straight quotation marks to typographic quotes",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Smart quotes", detail: "Use curly quotes"),
+                DefaultsOption(value: "false", label: "Straight quotes", detail: "Use straight quotes")
+            ],
+            default: "true",
+            restartApplication: "TextEdit"
+        ),
+        
+        // MARK: Xcode — additional
+        DefaultsCommand(
+            category: .xcode,
+            domain: "com.apple.dt.Xcode",
+            key: "IDEAdditionalCounterpartSuffixes",
+            title: "Additional Counterpart Suffixes",
+            summary: "Add extra suffixes that Xcode treats as counterparts in the Related Items menu",
+            type: .array,
+            options: [
+                DefaultsOption(value: "\"ViewModel\" \"View\"", label: "ViewModel / View", detail: "Adds -ViewModel and -View"),
+                DefaultsOption(value: "\"Router\" \"Interactor\" \"Builder\"", label: "Router / Interactor / Builder", detail: "Adds -Router, -Interactor and -Builder")
+            ],
+            default: nil,
+            restartApplication: "Xcode"
+        ),
+        
+        // MARK: Time Machine
+        DefaultsCommand(
+            category: .timeMachine,
+            domain: "com.apple.TimeMachine",
+            key: "DoNotOfferNewDisksForBackup",
+            title: "Don't Offer New Disks",
+            summary: "Stop Time Machine prompting to use newly connected drives as backup disks",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Don't offer new disks", detail: "Never prompt"),
+                DefaultsOption(value: "false", label: "Offer new disks", detail: "Prompt when a disk is connected")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        
+        // MARK: Feedback Assistant
+        DefaultsCommand(
+            category: .feedbackAssistant,
+            domain: "com.apple.appleseed.FeedbackAssistant",
+            key: "Autogather",
+            title: "Autogather",
+            summary: "Automatically collect large diagnostic files when submitting a feedback report",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Autogather", detail: "Collect diagnostics automatically"),
+                DefaultsOption(value: "false", label: "Don't autogather", detail: "Attach files manually")
+            ],
+            default: "true",
+            restartApplication: nil
+        ),
+        
+        // MARK: Dock — additional
+        DefaultsCommand(
+            category: .dock,
+            domain: "com.apple.dock",
+            key: "scroll-to-open",
+            title: "Scroll to Exposé",
+            summary: "Scroll up on a Dock icon to show that app's windows, or to open a stack",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable scroll to Exposé", detail: "Scroll on an icon to show its windows"),
+                DefaultsOption(value: "false", label: "Disable", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Dock"
+        ),
+        DefaultsCommand(
+            category: .dock,
+            domain: "com.apple.dock",
+            key: "enable-spring-load-actions-on-all-items",
+            title: "Spring Loading for All Dock Items",
+            summary: "Hover a dragged file over any Dock icon to open it in that app",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable spring loading", detail: "Hover over any Dock icon"),
+                DefaultsOption(value: "false", label: "Disable", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Dock"
+        ),
+        
+        // MARK: Finder — imported from macOS defaults
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "_FXSortFoldersFirstOnDesktop",
+            title: "Keep Folders on Top of Desktop",
+            summary: "Sort desktop icons so folders always appear before files",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Folders on top", detail: "Group folders above files"),
+                DefaultsOption(value: "false", label: "Sort by name", detail: "Default ordering")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "_FXEnableColumnAutoSizing",
+            title: "Column Auto Sizing",
+            summary: "Automatically widen columns in column view to fit their contents",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Auto size columns", detail: "Fit content automatically"),
+                DefaultsOption(value: "false", label: "Fixed width", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "FinderSpawnTab",
+            title: "Open Folders in Tabs",
+            summary: "Open Finder folders in a new tab instead of a new window",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "New tab", detail: "Open folders in tabs"),
+                DefaultsOption(value: "false", label: "New window", detail: "Open folders in windows")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "FXRemoveOldTrashItems",
+            title: "Empty Trash After 30 Days",
+            summary: "Automatically delete items that have been in the Trash for more than 30 days",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Remove after 30 days", detail: "Trash empties automatically"),
+                DefaultsOption(value: "false", label: "Keep items", detail: "Keep the Trash until emptied manually")
+            ],
+            default: "false",
+            restartApplication: "Finder",
+            risk: "Files left in the Trash are deleted permanently after 30 days and cannot be recovered."
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "QuitMenuItem",
+            title: "Quit Menu Item",
+            summary: "Add a Quit command to the Finder menu",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show Quit", detail: "Add Quit to the Finder menu"),
+                DefaultsOption(value: "false", label: "Hide Quit", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder",
+            risk: "Quitting Finder behaves oddly and can leave the desktop without a running Finder session."
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.universalaccess",
+            key: "showWindowTitlebarIcons",
+            title: "Title Bar Icons",
+            summary: "Always show the folder icon before the title in window title bars",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Always show icon", detail: "Show the title bar icon"),
+                DefaultsOption(value: "false", label: "Hide icon", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "-g",
+            key: "NSDocumentsSaveNewDocumentsToCloud",
+            title: "Save to Disk Location",
+            summary: "Choose whether new documents are saved to iCloud Drive or to a local folder",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Save to iCloud Drive", detail: "Default cloud location"),
+                DefaultsOption(value: "false", label: "Save on this Mac", detail: "Use a local folder")
+            ],
+            default: "true",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "-g",
+            key: "NSTableViewDefaultSizeMode",
+            title: "Sidebar Icon Size",
+            summary: "Choose the size of icons in Finder and other app sidebars",
+            type: .int,
+            options: [
+                DefaultsOption(value: "1", label: "Small", detail: "Compact sidebar icons"),
+                DefaultsOption(value: "2", label: "Medium", detail: "Default sidebar icon size"),
+                DefaultsOption(value: "3", label: "Large", detail: "Large sidebar icons")
+            ],
+            default: "2",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "-g",
+            key: "NSToolbarTitleViewRolloverDelay",
+            title: "Toolbar Title Rollover Delay",
+            summary: "How long to hover over a window title before the hidden icon appears",
+            type: .float,
+            options: [
+                DefaultsOption(value: "0", label: "Instant", detail: "No delay"),
+                DefaultsOption(value: "0.5", label: "0.5 s", detail: "Short delay"),
+                DefaultsOption(value: "1", label: "1 s", detail: "Longer delay")
+            ],
+            default: nil,
+            restartApplication: "Finder"
+        ),
+        
+        // MARK: Keyboard — additional
+        DefaultsCommand(
+            category: .keyboard,
+            domain: "-g",
+            key: "NSAutomaticPeriodSubstitutionEnabled",
+            title: "Add Period With Double Space",
+            summary: "Type a period by pressing the space bar twice",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable", detail: "Double-space inserts a period"),
+                DefaultsOption(value: "false", label: "Disable", detail: "Double-space inserts two spaces")
+            ],
+            default: "true",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .keyboard,
+            domain: "-g",
+            key: "TSMLanguageIndicatorEnabled",
+            title: "Toggle Language Indicator",
+            summary: "Show the language indicator while switching input sources",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show indicator", detail: "Display the language indicator"),
+                DefaultsOption(value: "false", label: "Hide indicator", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        
+        // MARK: Mission Control — additional
+        DefaultsCommand(
+            category: .missionControl,
+            domain: "-g",
+            key: "AppleSpacesSwitchOnActivate",
+            title: "Switch to Space With Open Windows",
+            summary: "When you switch to an app, jump to a Space that already has its windows",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Switch Spaces", detail: "Move to a Space with the app's windows"),
+                DefaultsOption(value: "false", label: "Stay put", detail: "Stay on the current Space")
+            ],
+            default: "true",
+            restartApplication: "Dock"
+        ),
+        
+        // MARK: System — additional
+        DefaultsCommand(
+            category: .system,
+            domain: "com.apple.helpviewer",
+            key: "DevMode",
+            title: "Help Menu Always on Top",
+            summary: "Keep the Help menu pinned above other windows",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Always on top", detail: "Help menu stays visible"),
+                DefaultsOption(value: "false", label: "Normal", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "com.apple.LaunchServices",
+            key: "LSQuarantine",
+            title: "App Quarantine Warning",
+            summary: "Show the downloaded-from-the-Internet warning when opening a downloaded app",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show warning", detail: "Warn about downloaded apps"),
+                DefaultsOption(value: "false", label: "Disable warning", detail: "Open without the warning")
+            ],
+            default: "true",
+            restartApplication: nil,
+            risk: "Turning this off removes a safety check that warns you before opening downloaded apps."
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "NSCloseAlwaysConfirmsChanges",
+            title: "Always Confirm Closing Documents",
+            summary: "Ask whether to keep changes when closing a document instead of saving automatically",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Always confirm", detail: "Ask before closing"),
+                DefaultsOption(value: "false", label: "Save automatically", detail: "Don't ask")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "com.apple.CloudSubscriptionFeatures.optIn",
+            key: "545129924",
+            title: "Apple Intelligence Opt-In",
+            summary: "Toggle the Apple Intelligence opt-in flag from the command line",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Opt in", detail: "Enable the Apple Intelligence opt-in"),
+                DefaultsOption(value: "false", label: "Opt out", detail: "Disable the Apple Intelligence opt-in")
+            ],
+            default: nil,
+            restartApplication: nil,
+            risk: "This uses an undocumented, version-specific key. It may have no effect or stop working after a macOS update."
         )
     ]
 }

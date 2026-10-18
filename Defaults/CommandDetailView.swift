@@ -236,6 +236,8 @@ struct CommandDetailView: View {
             return .purple
         case .string, .enumType:
             return .green
+        case .array:
+            return .orange
         }
     }
     
@@ -260,6 +262,10 @@ struct CommandDetailView: View {
         if target.contains("terminal") { commands.append("killall Terminal") }
         if target.contains("textedit") { commands.append("killall TextEdit") }
         if target.contains("xcode") { commands.append("killall Xcode") }
+        if target.contains("activity monitor") { commands.append("killall \"Activity Monitor\"") }
+        if target.contains("simulator") { commands.append("killall Simulator") }
+        if target.contains("messages") { commands.append("killall Messages") }
+        if target.contains("music") { commands.append("killall Music") }
         if target.contains("disk utility") || target.contains("diskutility") {
             commands.append("killall \"Disk Utility\" 2>/dev/null || killall DiskUtility 2>/dev/null")
         }

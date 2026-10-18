@@ -12,12 +12,18 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
     // Apps
     case safari
     case mail
+    case messages
+    case music
     case textEdit
     case xcode
+    case activityMonitor
+    case simulator
     
     // System
     case system
     case keyboard
+    case mouse
+    case trackpad
     case loginWindow
     case screensaver
     case airDrop
@@ -26,6 +32,8 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
     case diskUtility
     case softwareUpdate
     case appStore
+    case timeMachine
+    case feedbackAssistant
     
     var id: String { rawValue }
     
@@ -39,10 +47,16 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .screenshots: return "Screenshots"
         case .safari: return "Safari"
         case .mail: return "Mail"
+        case .messages: return "Messages"
+        case .music: return "Music"
         case .textEdit: return "TextEdit"
         case .xcode: return "Xcode"
+        case .activityMonitor: return "Activity Monitor"
+        case .simulator: return "Simulator"
         case .system: return "System (Global)"
         case .keyboard: return "Keyboard"
+        case .mouse: return "Mouse"
+        case .trackpad: return "Trackpad"
         case .loginWindow: return "Login Window"
         case .screensaver: return "Screensaver"
         case .airDrop: return "AirDrop"
@@ -51,6 +65,8 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .diskUtility: return "Disk Utility"
         case .softwareUpdate: return "Software Update"
         case .appStore: return "App Store"
+        case .timeMachine: return "Time Machine"
+        case .feedbackAssistant: return "Feedback Assistant"
         }
     }
     
@@ -65,10 +81,16 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .screenshots: return "camera.viewfinder"
         case .safari: return "safari"
         case .mail: return "envelope"
+        case .messages: return "message.fill"
+        case .music: return "music.note"
         case .textEdit: return "doc.text"
         case .xcode: return "hammer"
+        case .activityMonitor: return "gauge.medium"
+        case .simulator: return "iphone"
         case .system: return "desktopcomputer"
         case .keyboard: return "keyboard"
+        case .mouse: return "computermouse"
+        case .trackpad: return "rectangle.and.hand.point.up.left"
         case .loginWindow: return "person.crop.square"
         case .screensaver: return "sparkles.tv"
         case .airDrop: return "dot.radiowaves.left.and.right"
@@ -77,6 +99,8 @@ enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
         case .diskUtility: return "externaldrive.fill"
         case .softwareUpdate: return "arrow.clockwise"
         case .appStore: return "bag"
+        case .timeMachine: return "clock.arrow.circlepath"
+        case .feedbackAssistant: return "exclamationmark.bubble"
         }
     }
     
@@ -102,6 +126,8 @@ enum DefaultsValueType: String, Codable {
     case float
     case string
     case enumType
+    /// Appends values to an array, e.g. `defaults write domain key -array-add "a" "b"`.
+    case array
     
     var displayName: String {
         switch self {
@@ -115,6 +141,8 @@ enum DefaultsValueType: String, Codable {
             return "String"
         case .enumType:
             return "Choice"
+        case .array:
+            return "Array"
         }
     }
 }
@@ -187,6 +215,8 @@ struct DefaultsCommand: Identifiable, Codable, Hashable {
             } else {
                 return "defaults write \(domain) \(key) -string \(v)"
             }
+        case .array:
+            return "defaults write \(domain) \(key) -array-add \(option.value)"
         }
     }
     
@@ -204,6 +234,8 @@ struct DefaultsCommand: Identifiable, Codable, Hashable {
             } else {
                 return "defaults write \(domain) \(key) -string \(value)"
             }
+        case .array:
+            return "defaults write \(domain) \(key) -array-add \(value)"
         }
     }
 }
