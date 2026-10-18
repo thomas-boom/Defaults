@@ -53,7 +53,7 @@ Commands are based on [macos-defaults.com](https://macos-defaults.com).
 ### Build from source
 
 ```bash
-git clone https://github.com/thomasboom/Defaults.git
+git clone https://github.com/thomas-boom/Defaults.git
 cd Defaults
 open Defaults.xcodeproj
 ```
@@ -161,4 +161,4 @@ Issues and pull requests are welcome. If a command is missing, outdated or gener
 
 Released under the [MIT License](LICENSE).
 
-Copyright © 2026 [Thomas Boom](https://github.com/thomasboom)
+Copyright © 2026 [Thomas Boom](https://github.com/thomas-boom)

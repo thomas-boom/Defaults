@@ -6,7 +6,7 @@ import AppKit
 enum AppInfo {
     static let name = "Defaults"
     static let author = "Thomas Boom"
-    static let repoURL = URL(string: "https://github.com/thomasboom/Defaults")!
+    static let repoURL = URL(string: "https://github.com/thomas-boom/Defaults")!
     
     static var version: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
