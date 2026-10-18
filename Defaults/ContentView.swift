@@ -5,7 +5,8 @@ struct ContentView: View {
     @State private var selectedCategory: DefaultsCategory? = .dock
     @State private var selectedCommandID: DefaultsCommand.ID?
     @State private var searchText = ""
-    @State private var copiedCommand: String? = nil
+    @State private var showCopyToast = false
+    @State private var toastResetTask: Task<Void, Never>?
     @State private var authGranted = false
     
     private var commandsInCategory: [DefaultsCommand] {
@@ -48,7 +49,7 @@ struct ContentView: View {
             }
         }
         .overlay(alignment: .top) {
-            if copiedCommand != nil {
+            if showCopyToast {
                 copyToast
             }
         }
@@ -146,12 +147,6 @@ struct ContentView: View {
             .padding(.vertical, 6)
             .background(.thinMaterial, in: Capsule())
             .transition(.move(edge: .top).combined(with: .opacity))
-            .animation(.easeInOut(duration: 0.2), value: copiedCommand)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    withAnimation { copiedCommand = nil }
-                }
-            }
     }
     
     // MARK: - Actions
@@ -159,7 +154,19 @@ struct ContentView: View {
     private func copyToClipboard(_ string: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(string, forType: .string)
-        copiedCommand = string
+        
+        withAnimation(.easeInOut(duration: 0.2)) {
+            showCopyToast = true
+        }
+        
+        toastResetTask?.cancel()
+        toastResetTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showCopyToast = false
+            }
+        }
     }
     
     private func requestAuth() {
