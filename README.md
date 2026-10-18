@@ -25,7 +25,6 @@ Every hidden macOS preference — where the Dock sits, whether screenshots get a
 
 **Defaults** is a native SwiftUI app that lets you browse those preferences, see the exact command each one needs, pick from its values, and apply it — without having to remember or look up any syntax.
 
-Commands are based on [macos-defaults.com](https://macos-defaults.com).
 
 ## Features
 
