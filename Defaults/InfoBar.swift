@@ -35,12 +35,6 @@ struct InfoBar: View {
                 .font(.jb(10))
                 .foregroundStyle(.secondary)
             
-            Spacer(minLength: 12)
-            
-            Text("© \(AppInfo.year) \(AppInfo.author)")
-                .font(.jb(9))
-                .foregroundStyle(.tertiary)
-            
             Button {
                 showInfo.toggle()
             } label: {
@@ -53,14 +47,14 @@ struct InfoBar: View {
                 infoPopover
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 7)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
         .background(.ultraThinMaterial, in: Capsule())
         .overlay(
             Capsule().strokeBorder(.separator.opacity(0.35))
         )
-        .shadow(color: .black.opacity(hovering ? 0.22 : 0.12), radius: hovering ? 8 : 4, y: 2)
-        .padding(.horizontal, 14)
+        .shadow(color: .black.opacity(hovering ? 0.22 : 0.12), radius: hovering ? 6 : 3, y: 2)
+        .padding(.trailing, 10)
         .padding(.bottom, 10)
         .onHover { isHovering in
             withAnimation(.easeInOut(duration: 0.15)) {

@@ -53,11 +53,17 @@ struct ContentView: View {
                 onAuthorize: requestAuth
             )
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 260)
+            .padding(6)
         } content: {
             commandList
                 .navigationSplitViewColumnWidth(min: 190, ideal: 230, max: 320)
+                .padding(.top, 6)
+                .padding(.trailing, 6)
+                .padding(.bottom, 6)
         } detail: {
             detailPane
+                .padding(.vertical, 6)
+                .padding(.trailing, 6)
         }
         .navigationSplitViewStyle(.balanced)
         .font(.jb(AppMetrics.baseFontSize))
@@ -66,7 +72,7 @@ struct ContentView: View {
                 copyToast
             }
         }
-        .overlay(alignment: .bottom) {
+        .overlay(alignment: .bottomTrailing) {
             InfoBar()
         }
         .frame(minWidth: AppMetrics.minWindowWidth, minHeight: AppMetrics.minWindowHeight)
@@ -95,7 +101,7 @@ struct ContentView: View {
                     .tag(command.id)
             }
         }
-        .contentMargins(.bottom, 46, for: .scrollContent)
+        .contentMargins(.bottom, 10, for: .scrollContent)
         .navigationTitle(selectedCategory?.displayName ?? "All Commands")
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
         .overlay {

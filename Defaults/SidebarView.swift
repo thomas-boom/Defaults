@@ -140,6 +140,13 @@ struct SidebarView: View {
             authorizeFooter
         }
         .frame(minWidth: 180, idealWidth: 200)
+        .background(.ultraThinMaterial)
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(.separator.opacity(0.25))
+        )
+        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
     }
     
     @ViewBuilder

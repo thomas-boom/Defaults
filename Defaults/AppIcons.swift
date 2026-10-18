@@ -22,25 +22,15 @@ enum AppIconLoader {
     }
 }
 
-/// Renders a category's icon: the real app icon when available, otherwise the
-/// category's SF Symbol tinted with its accent color.
+/// Renders a category's icon using SF Symbols only.
 struct CategoryIcon: View {
     let category: DefaultsCategory
     var size: CGFloat = 16
     
     var body: some View {
-        Group {
-            if let path = category.appPath, let image = AppIconLoader.icon(for: path) {
-                Image(nsImage: image)
-                    .resizable()
-                    .interpolation(.high)
-                    .aspectRatio(contentMode: .fit)
-            } else {
-                Image(systemName: category.icon)
-                    .font(.system(size: size * 0.82))
-                    .foregroundStyle(category.accentColor)
-            }
-        }
-        .frame(width: size, height: size)
+        Image(systemName: category.icon)
+            .font(.system(size: size * 0.82))
+            .foregroundStyle(category.accentColor)
+            .frame(width: size, height: size)
     }
 }

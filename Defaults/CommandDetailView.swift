@@ -48,11 +48,11 @@ struct CommandDetailView: View {
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .contentMargins(.bottom, 46, for: .scrollContent)
+        .contentMargins(.bottom, 10, for: .scrollContent)
         .overlay(alignment: .bottomTrailing) {
             terminalButton
                 .padding(.trailing, 14)
-                .padding(.bottom, 56)
+                .padding(.bottom, 14)
         }
         .onAppear {
             if selectedOptionID == nil {
