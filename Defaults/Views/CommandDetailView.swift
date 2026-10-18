@@ -286,12 +286,8 @@ struct CommandDetailView: View {
         
         switch appState.runPrivileged(shellCmd) {
         case .needsAuthorization:
+            // The password sheet is the only prompt: no additional alert.
             appState.requestAuth()
-            presentAlert(
-                title: "Authorization Required",
-                message: "Please authorize first, then press Apply & Restart again.\n\nThe command was copied to the clipboard:\n\(writeCmd)",
-                style: .warning
-            )
         case .failure(let message):
             presentAlert(
                 title: "Failed to apply change",
