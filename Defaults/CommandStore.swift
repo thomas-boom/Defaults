@@ -503,7 +503,8 @@ struct CommandStore {
                 DefaultsOption(value: "false", label: "Normal empty", detail: "Standard Trash empty")
             ],
             default: "false",
-            restartApplication: "Finder"
+            restartApplication: "Finder",
+            risk: "Overwrites deleted files so they can never be recovered. This option has also been removed from recent macOS versions."
         ),
         DefaultsCommand(
             category: .finder,
@@ -776,6 +777,570 @@ struct CommandStore {
             ],
             default: "false",
             restartApplication: "Xcode"
+        ),
+        
+        // MARK: System (Global) — additional
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "NSAutomaticWindowAnimationsEnabled",
+            title: "Window Open/Close Animations",
+            summary: "Enable or disable the animation when windows open and close",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Animate windows", detail: "Default window animations"),
+                DefaultsOption(value: "false", label: "No animations", detail: "Windows appear/disappear instantly")
+            ],
+            default: "true",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "NSNavPanelExpandedStateForSaveMode",
+            title: "Expand Save Panel by Default",
+            summary: "Open the full save dialog instead of the compact version",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Always expanded", detail: "Show the full save panel"),
+                DefaultsOption(value: "false", label: "Compact", detail: "Use the collapsed save panel")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "PMPrintingExpandedStateForPrint",
+            title: "Expand Print Panel by Default",
+            summary: "Show the full print dialog with all options expanded",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Always expanded", detail: "Show all print options"),
+                DefaultsOption(value: "false", label: "Compact", detail: "Use the collapsed print panel")
+            ],
+            default: "false",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleShowScrollBars",
+            title: "When to Show Scroll Bars",
+            summary: "Control whether scroll bars are always, never, or automatically shown",
+            type: .enumType,
+            options: [
+                DefaultsOption(value: "Automatic", label: "Automatically", detail: "Based on the input device"),
+                DefaultsOption(value: "WhenScrolling", label: "When scrolling", detail: "Only while scrolling"),
+                DefaultsOption(value: "Always", label: "Always", detail: "Scroll bars always visible")
+            ],
+            default: "Automatic",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "AppleEnableSwipeNavigateWithScrolls",
+            title: "Swipe Between Pages",
+            summary: "Swipe with two fingers to move forward or back in apps and Safari",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Enable two-finger swipe", detail: "Swipe to navigate pages"),
+                DefaultsOption(value: "false", label: "Disable swipe", detail: "Turn off swipe navigation")
+            ],
+            default: "true",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "NSQuitAlwaysKeepsWindows",
+            title: "Restore Windows on Reopen",
+            summary: "Reopen windows and documents when a app is relaunched",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Restore windows", detail: "Keep windows on restart"),
+                DefaultsOption(value: "false", label: "Start fresh", detail: "Don't restore previous windows")
+            ],
+            default: "true",
+            restartApplication: "Relaunch apps",
+            risk: "Disabling this makes macOS forget open windows and documents, which some apps rely on to restore work."
+        ),
+        DefaultsCommand(
+            category: .system,
+            domain: "-g",
+            key: "NSDisableAutomaticTermination",
+            title: "Disable Automatic App Termination",
+            summary: "Prevent macOS from quitting apps to free up memory",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Never auto-quit", detail: "Apps stay open in memory"),
+                DefaultsOption(value: "false", label: "Allow auto-quit", detail: "macOS may quit idle apps")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        
+        // MARK: Keyboard
+        DefaultsCommand(
+            category: .keyboard,
+            domain: "com.apple.HIToolbox",
+            key: "AppleFnUsageType",
+            title: "Function Key Behavior",
+            summary: "Choose what happens when you press the globe/fn key",
+            type: .int,
+            options: [
+                DefaultsOption(value: "0", label: "Do Nothing", detail: "fn key has no special action"),
+                DefaultsOption(value: "1", label: "Change Input Source", detail: "Switch keyboard input source"),
+                DefaultsOption(value: "2", label: "Show Emoji & Symbols", detail: "Open the character viewer"),
+                DefaultsOption(value: "3", label: "Start Dictation", detail: "Begin dictation")
+            ],
+            default: "0",
+            restartApplication: nil
+        ),
+        DefaultsCommand(
+            category: .keyboard,
+            domain: "com.apple.HIToolbox",
+            key: "AppleKeyboardUIMode",
+            title: "Full Keyboard Access",
+            summary: "Tab through all controls, not just text fields",
+            type: .int,
+            options: [
+                DefaultsOption(value: "0", label: "Text fields only", detail: "Tab moves between text fields"),
+                DefaultsOption(value: "2", label: "All controls", detail: "Tab reaches buttons and lists"),
+                DefaultsOption(value: "3", label: "All controls + lists", detail: "Full keyboard navigation")
+            ],
+            default: "0",
+            restartApplication: "Relaunch apps"
+        ),
+        DefaultsCommand(
+            category: .keyboard,
+            domain: "-g",
+            key: "com.apple.keyboard.fnState",
+            title: "Use F1–F12 as Standard Function Keys",
+            summary: "Make the top row send F1–F12 instead of the media shortcuts",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Standard function keys", detail: "Top row sends F1–F12"),
+                DefaultsOption(value: "false", label: "Media keys", detail: "Top row controls brightness/volume")
+            ],
+            default: "false",
+            restartApplication: nil
+        ),
+        
+        // MARK: Login Window
+        DefaultsCommand(
+            category: .loginWindow,
+            domain: "com.apple.loginwindow",
+            key: "SHOWFULLNAME",
+            title: "Show Name and Password Fields",
+            summary: "Display separate name and password fields instead of a list of users",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Name & password fields", detail: "Type your account name"),
+                DefaultsOption(value: "false", label: "User list", detail: "Click your user picture")
+            ],
+            default: "false",
+            restartApplication: "Log out"
+        ),
+        DefaultsCommand(
+            category: .loginWindow,
+            domain: "com.apple.loginwindow",
+            key: "DisableGuestAccount",
+            title: "Disable Guest Account",
+            summary: "Stop the Guest User account from being available at login",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Disable guest", detail: "No guest login allowed"),
+                DefaultsOption(value: "false", label: "Enable guest", detail: "Allow guest login")
+            ],
+            default: "false",
+            restartApplication: "Log out",
+            risk: "If FileVault is enabled, enabling a guest account can grant disk access without a password. Disabling it is the safer choice."
+        ),
+        DefaultsCommand(
+            category: .loginWindow,
+            domain: "com.apple.loginwindow",
+            key: "TALLogoutSavesState",
+            title: "Resume Apps After Log In",
+            summary: "Reopen apps and windows when you log back in",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Resume", detail: "Reopen apps on login"),
+                DefaultsOption(value: "false", label: "Start fresh", detail: "Don't reopen apps")
+            ],
+            default: "true",
+            restartApplication: "Log out"
+        ),
+        DefaultsCommand(
+            category: .loginWindow,
+            domain: "com.apple.loginwindow",
+            key: "LoginwindowText",
+            title: "Login Screen Message",
+            summary: "Display a custom message (ownership notice) on the login screen",
+            type: .string,
+            options: [
+                DefaultsOption(value: "This Mac belongs to Thomas", label: "Example: ownership notice", detail: "Shown on the login window"),
+                DefaultsOption(value: "Authorized users only", label: "Example: warning", detail: "A short warning message")
+            ],
+            default: nil,
+            restartApplication: "Log out"
+        ),
+        
+        // MARK: Screensaver
+        DefaultsCommand(
+            category: .screensaver,
+            domain: "com.apple.screensaver",
+            key: "askForPassword",
+            title: "Require Password After Screensaver",
+            summary: "Require a password when waking from the screensaver",
+            type: .int,
+            options: [
+                DefaultsOption(value: "1", label: "Require password", detail: "Ask for password on wake"),
+                DefaultsOption(value: "0", label: "No password", detail: "Wake without a password")
+            ],
+            default: "1",
+            restartApplication: nil,
+            risk: "Turning this off leaves your Mac accessible to anyone who wakes it."
+        ),
+        DefaultsCommand(
+            category: .screensaver,
+            domain: "com.apple.screensaver",
+            key: "askForPasswordDelay",
+            title: "Password Grace Period",
+            summary: "Delay (in seconds) before the password is required",
+            type: .int,
+            options: [
+                DefaultsOption(value: "0", label: "Immediately", detail: "Lock right away"),
+                DefaultsOption(value: "5", label: "5 seconds", detail: "Short grace period"),
+                DefaultsOption(value: "60", label: "1 minute", detail: "One minute grace period"),
+                DefaultsOption(value: "300", label: "5 minutes", detail: "Longer grace period")
+            ],
+            default: "0",
+            restartApplication: nil,
+            risk: "A long grace period means your Mac stays unlocked for that time after the screensaver starts."
+        ),
+        DefaultsCommand(
+            category: .screensaver,
+            domain: "com.apple.screensaver",
+            key: "idleTime",
+            title: "Screensaver Idle Delay",
+            summary: "Seconds of inactivity before the screensaver starts",
+            type: .int,
+            options: [
+                DefaultsOption(value: "300", label: "5 minutes", detail: "Start after 5 minutes"),
+                DefaultsOption(value: "600", label: "10 minutes", detail: "Start after 10 minutes"),
+                DefaultsOption(value: "1200", label: "20 minutes", detail: "Start after 20 minutes"),
+                DefaultsOption(value: "0", label: "Never", detail: "Disable the screensaver")
+            ],
+            default: "1200",
+            restartApplication: nil
+        ),
+        
+        // MARK: AirDrop
+        DefaultsCommand(
+            category: .airDrop,
+            domain: "com.apple.NetworkBrowser",
+            key: "BrowseAllInterfaces",
+            title: "Use AirDrop on All Network Interfaces",
+            summary: "Make AirDrop discoverable over Ethernet and other interfaces, not just Wi-Fi",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "All interfaces", detail: "AirDrop works on any network"),
+                DefaultsOption(value: "false", label: "Wi-Fi only", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .airDrop,
+            domain: "com.apple.NetworkBrowser",
+            key: "DisableAirDrop",
+            title: "Disable AirDrop",
+            summary: "Completely turn off AirDrop",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Disable AirDrop", detail: "Hides AirDrop everywhere"),
+                DefaultsOption(value: "false", label: "Enable AirDrop", detail: "Keep AirDrop available")
+            ],
+            default: "false",
+            restartApplication: "Finder",
+            risk: "Disables AirDrop for the whole system. The change is reversible but not obvious in the UI."
+        ),
+        
+        // MARK: Crash Reporter
+        DefaultsCommand(
+            category: .crashReporter,
+            domain: "com.apple.CrashReporter",
+            key: "DialogType",
+            title: "Crash Report Prompt",
+            summary: "Control what happens when an app crashes",
+            type: .enumType,
+            options: [
+                DefaultsOption(value: "crashreport", label: "Show prompt", detail: "Ask before sending a report"),
+                DefaultsOption(value: "server", label: "Send automatically", detail: "Silently send reports"),
+                DefaultsOption(value: "none", label: "Do nothing", detail: "Hide crash dialogs entirely")
+            ],
+            default: "crashreport",
+            restartApplication: nil,
+            risk: "\"Do nothing\" hides all crash dialogs and can make app problems much harder to diagnose."
+        ),
+        
+        // MARK: .DS_Store
+        DefaultsCommand(
+            category: .dsStore,
+            domain: "com.apple.desktopservices",
+            key: "DSDontWriteNetworkStores",
+            title: "Don't Create .DS_Store on Network Drives",
+            summary: "Stop Finder from writing .DS_Store files onto network volumes",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Don't write", detail: "No .DS_Store on network drives"),
+                DefaultsOption(value: "false", label: "Write normally", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .dsStore,
+            domain: "com.apple.desktopservices",
+            key: "DSDontWriteUSBStores",
+            title: "Don't Create .DS_Store on USB Drives",
+            summary: "Stop Finder from writing .DS_Store files onto USB/removable volumes",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Don't write", detail: "No .DS_Store on USB drives"),
+                DefaultsOption(value: "false", label: "Write normally", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        
+        // MARK: Screenshots
+        DefaultsCommand(
+            category: .screenshots,
+            domain: "com.apple.screencapture",
+            key: "location",
+            title: "Screenshot Save Location",
+            summary: "Where screenshots are saved",
+            type: .string,
+            options: [
+                DefaultsOption(value: "~/Desktop", label: "Desktop", detail: "Save to the Desktop"),
+                DefaultsOption(value: "~/Downloads", label: "Downloads", detail: "Save to Downloads"),
+                DefaultsOption(value: "~/Documents", label: "Documents", detail: "Save to Documents"),
+                DefaultsOption(value: "~/Pictures/Screenshots", label: "Pictures/Screenshots", detail: "Dedicated screenshots folder")
+            ],
+            default: "~/Desktop",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .screenshots,
+            domain: "com.apple.screencapture",
+            key: "type",
+            title: "Screenshot File Format",
+            summary: "Image format used for screenshots",
+            type: .enumType,
+            options: [
+                DefaultsOption(value: "png", label: "PNG", detail: "Lossless, larger files"),
+                DefaultsOption(value: "jpg", label: "JPEG", detail: "Smaller, lossy files"),
+                DefaultsOption(value: "pdf", label: "PDF", detail: "Vector-friendly format"),
+                DefaultsOption(value: "tiff", label: "TIFF", detail: "Uncompressed format")
+            ],
+            default: "png",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .screenshots,
+            domain: "com.apple.screencapture",
+            key: "disable-shadow",
+            title: "Window Screenshot Shadow",
+            summary: "Whether screenshots of windows include a drop shadow",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "No shadow", detail: "Omit the drop shadow"),
+                DefaultsOption(value: "false", label: "Include shadow", detail: "Keep the shadow")
+            ],
+            default: "false",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .screenshots,
+            domain: "com.apple.screencapture",
+            key: "show-thumbnail",
+            title: "Show Floating Thumbnail",
+            summary: "Show the floating preview thumbnail after taking a screenshot",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show thumbnail", detail: "Floating preview appears"),
+                DefaultsOption(value: "false", label: "Hide thumbnail", detail: "Screenshot saves silently")
+            ],
+            default: "true",
+            restartApplication: "SystemUIServer"
+        ),
+        
+        // MARK: Menu Bar Clock
+        DefaultsCommand(
+            category: .menuBarClock,
+            domain: "com.apple.menuextra.clock",
+            key: "ShowSeconds",
+            title: "Show Seconds in Clock",
+            summary: "Display seconds in the menu bar clock",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show seconds", detail: "Clock shows hh:mm:ss"),
+                DefaultsOption(value: "false", label: "Hide seconds", detail: "Clock shows hh:mm")
+            ],
+            default: "false",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .menuBarClock,
+            domain: "com.apple.menuextra.clock",
+            key: "ShowDayOfWeek",
+            title: "Show Day of Week",
+            summary: "Include the weekday in the menu bar clock",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show weekday", detail: "e.g. Mon 09:41"),
+                DefaultsOption(value: "false", label: "Hide weekday", detail: "e.g. 09:41")
+            ],
+            default: "false",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .menuBarClock,
+            domain: "com.apple.menuextra.clock",
+            key: "IsAnalog",
+            title: "Analog Menu Bar Clock",
+            summary: "Show an analog clock in the menu bar",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Analog clock", detail: "Show a clock face"),
+                DefaultsOption(value: "false", label: "Digital clock", detail: "Show text time")
+            ],
+            default: "false",
+            restartApplication: "SystemUIServer"
+        ),
+        DefaultsCommand(
+            category: .menuBarClock,
+            domain: "com.apple.menuextra.clock",
+            key: "DateFormat",
+            title: "Menu Bar Date Format",
+            summary: "Custom date/time format string for the menu bar clock",
+            type: .string,
+            options: [
+                DefaultsOption(value: "EEE d MMM  HH:mm", label: "Weekday D Mon HH:mm", detail: "e.g. Mon 18 Oct  14:05"),
+                DefaultsOption(value: "EEE d MMM  h:mm a", label: "Weekday D Mon h:mm AM/PM", detail: "12-hour format"),
+                DefaultsOption(value: "EEE HH:mm:ss", label: "Weekday HH:mm:ss", detail: "With seconds")
+            ],
+            default: nil,
+            restartApplication: "SystemUIServer"
+        ),
+        
+        // MARK: Finder — additional
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "_FXShowPosixPathInTitle",
+            title: "Show Full Path in Finder Title",
+            summary: "Display the full POSIX path in the title bar of Finder windows",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show full path", detail: "e.g. /Users/you/Documents"),
+                DefaultsOption(value: "false", label: "Show folder name", detail: "Just the folder name")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "FXEnableExtensionChangeWarning",
+            title: "Warn Before Changing a File Extension",
+            summary: "Show a warning when you change a file's extension",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show warning", detail: "Confirm extension changes"),
+                DefaultsOption(value: "false", label: "No warning", detail: "Change extensions silently")
+            ],
+            default: "true",
+            restartApplication: "Finder",
+            risk: "Disabling the warning lets you change an extension with no confirmation, which can make files impossible to open."
+        ),
+        DefaultsCommand(
+            category: .finder,
+            domain: "com.apple.finder",
+            key: "DisableAllAnimations",
+            title: "Disable Finder Animations",
+            summary: "Turn off animations in Finder windows for a snappier feel",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "No animations", detail: "Instant window changes"),
+                DefaultsOption(value: "false", label: "Keep animations", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Finder"
+        ),
+        
+        // MARK: Dashboard / Mission Control — additional
+        DefaultsCommand(
+            category: .missionControl,
+            domain: "com.apple.dock",
+            key: "mru-spaces",
+            title: "Automatically Rearrange Spaces",
+            summary: "Reorder Spaces based on how recently they were used",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Auto-rearrange", detail: "Most recent Space first"),
+                DefaultsOption(value: "false", label: "Keep order", detail: "Spaces never move")
+            ],
+            default: "true",
+            restartApplication: "Dock"
+        ),
+        DefaultsCommand(
+            category: .missionControl,
+            domain: "com.apple.dock",
+            key: "expose-animation-duration",
+            title: "Mission Control Animation Speed",
+            summary: "Duration of the Mission Control animation",
+            type: .float,
+            options: [
+                DefaultsOption(value: "0.0", label: "Instant", detail: "No animation"),
+                DefaultsOption(value: "0.1", label: "Fast", detail: "Quick animation"),
+                DefaultsOption(value: "0.5", label: "Slower", detail: "Longer animation")
+            ],
+            default: nil,
+            restartApplication: "Dock"
+        ),
+        
+        // MARK: Screenshot of Dock extras
+        DefaultsCommand(
+            category: .dock,
+            domain: "com.apple.dock",
+            key: "no-glass",
+            title: "Disable 3D Dock Glass",
+            summary: "Use a flat, two-dimensional Dock instead of the glass effect",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Flat Dock", detail: "No glass/gradient effect"),
+                DefaultsOption(value: "false", label: "Glass Dock", detail: "Default 3D look")
+            ],
+            default: "false",
+            restartApplication: "Dock"
+        ),
+        DefaultsCommand(
+            category: .dock,
+            domain: "com.apple.dock",
+            key: "showhidden",
+            title: "Show Hidden Dock Items",
+            summary: "Make hidden (transparent) Dock icons visible",
+            type: .bool,
+            options: [
+                DefaultsOption(value: "true", label: "Show hidden items", detail: "Reveal transparent icons"),
+                DefaultsOption(value: "false", label: "Hide them", detail: "Default behaviour")
+            ],
+            default: "false",
+            restartApplication: "Dock"
         )
     ]
 }

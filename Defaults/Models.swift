@@ -1,81 +1,101 @@
 import SwiftUI
 
 enum DefaultsCategory: String, CaseIterable, Identifiable, Codable {
-    case system
+    // Desktop
     case dock
     case finder
-    case safari
-    case mail
     case missionControl
     case dashboard
+    case menuBarClock
+    case screenshots
+    
+    // Apps
+    case safari
+    case mail
     case textEdit
+    case terminal
+    case xcode
+    
+    // System
+    case system
+    case keyboard
+    case loginWindow
+    case screensaver
+    case airDrop
+    case crashReporter
+    case dsStore
     case diskUtility
     case softwareUpdate
     case appStore
-    case terminal
-    case xcode
     
     var id: String { rawValue }
     
     var displayName: String {
         switch self {
-        case .system:
-            return "System (Global)"
-        case .dock:
-            return "Dock"
-        case .finder:
-            return "Finder"
-        case .safari:
-            return "Safari"
-        case .mail:
-            return "Mail"
-        case .missionControl:
-            return "Mission Control & Spaces"
-        case .dashboard:
-            return "Dashboard"
-        case .textEdit:
-            return "TextEdit"
-        case .diskUtility:
-            return "Disk Utility"
-        case .softwareUpdate:
-            return "Software Update"
-        case .appStore:
-            return "App Store"
-        case .terminal:
-            return "Terminal"
-        case .xcode:
-            return "Xcode"
+        case .dock: return "Dock"
+        case .finder: return "Finder"
+        case .missionControl: return "Mission Control & Spaces"
+        case .dashboard: return "Dashboard"
+        case .menuBarClock: return "Menu Bar Clock"
+        case .screenshots: return "Screenshots"
+        case .safari: return "Safari"
+        case .mail: return "Mail"
+        case .textEdit: return "TextEdit"
+        case .terminal: return "Terminal"
+        case .xcode: return "Xcode"
+        case .system: return "System (Global)"
+        case .keyboard: return "Keyboard"
+        case .loginWindow: return "Login Window"
+        case .screensaver: return "Screensaver"
+        case .airDrop: return "AirDrop"
+        case .crashReporter: return "Crash Reporter"
+        case .dsStore: return ".DS_Store"
+        case .diskUtility: return "Disk Utility"
+        case .softwareUpdate: return "Software Update"
+        case .appStore: return "App Store"
         }
     }
     
+    /// SF Symbol used as a fallback when no real app icon is available.
     var icon: String {
         switch self {
-        case .system:
-            return "desktopcomputer"
-        case .dock:
-            return "dock.rectangle"
-        case .finder:
-            return "folder.fill"
-        case .safari:
-            return "compass"
-        case .mail:
-            return "envelope"
-        case .missionControl:
-            return "rectangle.2.swap"
-        case .dashboard:
-            return "rectangle.grid.2x2"
-        case .textEdit:
-            return "doc.text"
-        case .diskUtility:
-            return "harddrive"
-        case .softwareUpdate:
-            return "arrow.clockwise"
-        case .appStore:
-            return "bag"
-        case .terminal:
-            return "terminal"
-        case .xcode:
-            return "hammer"
+        case .dock: return "dock.rectangle"
+        case .finder: return "folder.fill"
+        case .missionControl: return "rectangle.2.swap"
+        case .dashboard: return "rectangle.grid.2x2"
+        case .menuBarClock: return "clock"
+        case .screenshots: return "camera.viewfinder"
+        case .safari: return "compass"
+        case .mail: return "envelope"
+        case .textEdit: return "doc.text"
+        case .terminal: return "terminal"
+        case .xcode: return "hammer"
+        case .system: return "desktopcomputer"
+        case .keyboard: return "keyboard"
+        case .loginWindow: return "person.crop.square"
+        case .screensaver: return "sparkles.tv"
+        case .airDrop: return "dot.radiowaves.left.and.right"
+        case .crashReporter: return "exclamationmark.triangle"
+        case .dsStore: return "externaldrive"
+        case .diskUtility: return "harddrive"
+        case .softwareUpdate: return "arrow.clockwise"
+        case .appStore: return "bag"
+        }
+    }
+    
+    /// Path to the matching system app bundle, used to load the real app icon
+    /// so Safari, Disk Utility, etc. look like the actual apps.
+    var appPath: String? {
+        switch self {
+        case .finder: return "/System/Library/CoreServices/Finder.app"
+        case .safari: return "/Applications/Safari.app"
+        case .mail: return "/System/Applications/Mail.app"
+        case .textEdit: return "/System/Applications/TextEdit.app"
+        case .terminal: return "/System/Applications/Utilities/Terminal.app"
+        case .xcode: return "/Applications/Xcode.app"
+        case .diskUtility: return "/System/Applications/Utilities/Disk Utility.app"
+        case .appStore: return "/System/Applications/App Store.app"
+        default: return nil
         }
     }
 }
@@ -128,8 +148,11 @@ struct DefaultsCommand: Identifiable, Codable, Hashable {
     let options: [DefaultsOption]
     let `default`: String?
     let restartApplication: String?
+    /// Non-nil when changing this setting can break behaviour or destroy data.
+    /// Rendered as a warning triangle in the list and a banner in the detail view.
+    let risk: String?
     
-    init(id: UUID = UUID(), category: DefaultsCategory, domain: String, key: String, title: String, summary: String, type: DefaultsValueType, options: [DefaultsOption], default: String? = nil, restartApplication: String? = nil) {
+    init(id: UUID = UUID(), category: DefaultsCategory, domain: String, key: String, title: String, summary: String, type: DefaultsValueType, options: [DefaultsOption], default: String? = nil, restartApplication: String? = nil, risk: String? = nil) {
         self.id = id
         self.category = category
         self.domain = domain
@@ -140,7 +163,10 @@ struct DefaultsCommand: Identifiable, Codable, Hashable {
         self.options = options
         self.default = `default`
         self.restartApplication = restartApplication
+        self.risk = risk
     }
+    
+    var hasRisk: Bool { risk != nil }
     
     var fullKeyPath: String {
         return "\(domain) \(key)"

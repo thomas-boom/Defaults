@@ -67,11 +67,12 @@ enum SidebarSection: String, CaseIterable, Identifiable {
 extension DefaultsCategory {
     var sidebarSection: SidebarSection {
         switch self {
-        case .dock, .finder, .missionControl, .dashboard:
+        case .dock, .finder, .missionControl, .dashboard, .menuBarClock, .screenshots:
             return .desktop
         case .safari, .mail, .textEdit, .terminal, .xcode:
             return .apps
-        case .system, .diskUtility, .softwareUpdate, .appStore:
+        case .system, .keyboard, .loginWindow, .screensaver, .airDrop,
+             .crashReporter, .dsStore, .diskUtility, .softwareUpdate, .appStore:
             return .system
         }
     }
@@ -87,12 +88,20 @@ extension DefaultsCategory {
         case .mail: return .indigo
         case .missionControl: return .purple
         case .dashboard: return .teal
+        case .menuBarClock: return .gray
+        case .screenshots: return .pink
         case .textEdit: return .brown
         case .diskUtility: return .orange
         case .softwareUpdate: return .green
         case .appStore: return .blue
         case .terminal: return .green
         case .xcode: return .blue
+        case .keyboard: return .gray
+        case .loginWindow: return .indigo
+        case .screensaver: return .mint
+        case .airDrop: return .cyan
+        case .crashReporter: return .red
+        case .dsStore: return .orange
         }
     }
 }
@@ -133,13 +142,19 @@ struct SidebarView: View {
         .frame(minWidth: 180, idealWidth: 200)
     }
     
+    @ViewBuilder
     private func sidebarRow(_ item: SidebarItem) -> some View {
         Label {
             Text(item.title)
                 .font(.jb(12, item.isProminent ? .semibold : .regular))
         } icon: {
-            Image(systemName: item.icon)
-                .foregroundStyle(item.accentColor)
+            switch item {
+            case .all:
+                Image(systemName: item.icon)
+                    .foregroundStyle(item.accentColor)
+            case .category(let category):
+                CategoryIcon(category: category, size: 15)
+            }
         }
         .tag(item)
     }

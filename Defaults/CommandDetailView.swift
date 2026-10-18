@@ -7,6 +7,7 @@ struct CommandDetailView: View {
     let onCopy: (String) -> Void
     
     @State private var selectedOptionID: UUID?
+    @State private var hoveringTerminal = false
     
     private var selectedOption: DefaultsOption? {
         if let id = selectedOptionID, let option = command.options.first(where: { $0.id == id }) {
@@ -19,6 +20,11 @@ struct CommandDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 header
+                
+                if let risk = command.risk {
+                    riskBanner(risk)
+                }
+                
                 infoGrid
                 
                 section(title: "What it does") {
@@ -42,9 +48,11 @@ struct CommandDetailView: View {
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .contentMargins(.bottom, 46, for: .scrollContent)
         .overlay(alignment: .bottomTrailing) {
             terminalButton
-                .padding(14)
+                .padding(.trailing, 14)
+                .padding(.bottom, 56)
         }
         .onAppear {
             if selectedOptionID == nil {
@@ -57,10 +65,7 @@ struct CommandDetailView: View {
     
     private var header: some View {
         HStack(alignment: .center, spacing: 10) {
-            Image(systemName: command.category.icon)
-                .font(.system(size: 18))
-                .foregroundStyle(command.category.accentColor)
-                .frame(width: 26)
+            CategoryIcon(category: command.category, size: 26)
             
             VStack(alignment: .leading, spacing: 1) {
                 Text(command.title)
@@ -161,14 +166,43 @@ struct CommandDetailView: View {
     private var terminalButton: some View {
         Button(action: openInTerminal) {
             Image(systemName: "terminal.fill")
-                .font(.system(size: 12))
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 34, height: 34)
+                .background(Color.black, in: RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(Color.white.opacity(0.18), lineWidth: 1)
+                )
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.small)
-        .buttonBorderShape(.circle)
-        .shadow(radius: 2, y: 1)
+        .buttonStyle(.plain)
+        .scaleEffect(hoveringTerminal ? 1.08 : 1.0)
+        .shadow(color: .black.opacity(hoveringTerminal ? 0.35 : 0.2),
+                radius: hoveringTerminal ? 6 : 3, y: 2)
+        .animation(.easeInOut(duration: 0.15), value: hoveringTerminal)
+        .onHover { isHovering in
+            hoveringTerminal = isHovering
+        }
         .disabled(selectedOption == nil)
         .help("Run the selected command in Terminal")
+    }
+    
+    private func riskBanner(_ message: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 13))
+                .foregroundStyle(.orange)
+            Text(message)
+                .font(.jb(11))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.orange.opacity(0.35))
+        )
     }
     
     // MARK: - Helpers

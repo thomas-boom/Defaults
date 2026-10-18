@@ -66,6 +66,9 @@ struct ContentView: View {
                 copyToast
             }
         }
+        .overlay(alignment: .bottom) {
+            InfoBar()
+        }
         .frame(minWidth: AppMetrics.minWindowWidth, minHeight: AppMetrics.minWindowHeight)
         .onAppear {
             if selectedCommandID == nil {
@@ -92,6 +95,7 @@ struct ContentView: View {
                     .tag(command.id)
             }
         }
+        .contentMargins(.bottom, 46, for: .scrollContent)
         .navigationTitle(selectedCategory?.displayName ?? "All Commands")
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
         .overlay {
@@ -163,10 +167,7 @@ struct CommandListRow: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: command.category.icon)
-                .font(.system(size: 12))
-                .foregroundStyle(command.category.accentColor)
-                .frame(width: 18)
+            CategoryIcon(category: command.category, size: 16)
             
             VStack(alignment: .leading, spacing: 1) {
                 Text(command.title)
@@ -177,6 +178,15 @@ struct CommandListRow: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
+            }
+            
+            Spacer(minLength: 4)
+            
+            if command.hasRisk {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.orange)
+                    .help(command.risk ?? "Use with caution")
             }
         }
         .padding(.vertical, 1)
