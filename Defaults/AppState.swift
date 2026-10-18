@@ -31,6 +31,31 @@ final class AppState: ObservableObject {
     }
 }
 
+/// Appearance options for the app window.
+enum AppTheme: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case dark
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .system: return "System"
+        case .light: return "Light"
+        case .dark: return "Dark"
+        }
+    }
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+}
+
 /// Helpers for detecting the privileges the app may need.
 enum Permissions {
     /// Whether the current user is a member of the `admin` group.

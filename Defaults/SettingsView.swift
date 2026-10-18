@@ -24,9 +24,19 @@ struct SettingsView: View {
 
 struct GeneralSettingsView: View {
     @AppStorage("showMenuBarIcon") private var showMenuBarIcon = true
+    @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
         Form {
+            Section("Appearance") {
+                Picker("Theme", selection: $appTheme) {
+                    ForEach(AppTheme.allCases) { theme in
+                        Text(theme.title).tag(theme)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+
             Section {
                 Toggle("Show icon in the menu bar", isOn: $showMenuBarIcon)
             } header: {

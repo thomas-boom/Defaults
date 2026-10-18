@@ -190,21 +190,23 @@ struct SidebarView: View {
     private var authorizeFooter: some View {
         Button(action: onAuthorize) {
             HStack(spacing: 8) {
-                Image(systemName: authGranted ? "lock.open.fill" : "lock.shield")
+                Image(systemName: authGranted ? "lock.open.fill" : "lock.shield.fill")
                     .font(.system(size: 12))
-                    .foregroundStyle(authGranted ? Color.green : Color.secondary)
                 Text(authGranted ? "Authorized" : "Authorize")
                     .font(.jb(11, .medium))
                 Spacer()
-
             }
+            .foregroundStyle(authGranted ? Color.green : Color.red)
             .padding(.horizontal, 10)
             .padding(.vertical, 7)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .disabled(authGranted)
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .help("Authorize once so system processes can be restarted without repeated prompts")
+        .help(authGranted
+              ? "Administrator access is granted"
+              : "Authorize once so system processes can be restarted without repeated prompts")
     }
 }

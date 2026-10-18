@@ -98,17 +98,6 @@ struct ContentView: View {
         .contentMargins(.bottom, 10, for: .scrollContent)
         .navigationTitle(selectedCategory?.displayName ?? "All Commands")
         .searchable(text: $searchText, placement: .toolbar, prompt: "Search")
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                if !appState.authGranted {
-                    Button(action: appState.requestAuth) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.red)
-                    }
-                    .help("Administrator access is required. Click to enter your password.")
-                }
-            }
-        }
         .overlay {
             if commandsInCategory.isEmpty {
                 ContentUnavailableView(

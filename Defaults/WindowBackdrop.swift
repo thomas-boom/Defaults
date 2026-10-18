@@ -1,11 +1,17 @@
 import SwiftUI
 
 struct WindowBackdrop: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             ZStack {
                 Color.clear
-                HalftoneTexture()
+                HalftoneTexture(
+                    color: colorScheme == .dark
+                        ? Color(hex: 0xF6E9CB, alpha: 0.06)
+                        : Color(hex: 0x33304A, alpha: 0.05)
+                )
             }
         }
         .ignoresSafeArea()
