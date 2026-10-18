@@ -2,9 +2,8 @@ import SwiftUI
 import AppKit
 import Combine
 
-/// Shared, app-wide state: administrator rights, Full Disk Access status and
-/// the account type of the current user. Both the main window and the menu-bar
-/// extra read from this single source of truth.
+/// Shared, app-wide state: administrator rights and the account type of the
+/// current user.
 ///
 /// Authorisation works by caching a `sudo` timestamp: the user types their
 /// password once, and the app keeps the cached credentials alive so "Apply &
@@ -12,7 +11,6 @@ import Combine
 @MainActor
 final class AppState: ObservableObject {
     @Published var authGranted = false
-    @Published var hasFullDiskAccess = false
     @Published var isAdminAccount = false
     /// Drives the in-app administrator password sheet.
     @Published var showAuthSheet = false
@@ -25,7 +23,6 @@ final class AppState: ObservableObject {
 
     func refreshPermissions() {
         isAdminAccount = Permissions.isAdminAccount
-        hasFullDiskAccess = Permissions.hasFullDiskAccess
     }
 
     /// Shows the password sheet when authorisation is still needed.
@@ -213,47 +210,5 @@ enum Permissions {
             guard getgrouplist(name, primaryGID, &groups, &count) != -1 else { return false }
         }
         return groups.prefix(Int(count)).map { gid_t($0) }.contains(adminGID)
-    }
-
-    /// Best-effort Full Disk Access detection by probing files that are
-    /// protected by TCC. Returns false when none of the probes are readable.
-    static var hasFullDiskAccess: Bool {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let probes = [
-            "Library/Application Support/com.apple.TCC/TCC.db",
-            "Library/Safari/History.db",
-            "Library/Messages/chat.db"
-        ]
-
-        for relative in probes {
-            let path = home.appendingPathComponent(relative).path
-            guard FileManager.default.fileExists(atPath: path) else { continue }
-            if let handle = FileHandle(forReadingAtPath: path) {
-                try? handle.close()
-                return true
-            }
-            return false
-        }
-
-        // Fallback: reading the TCC directory itself is also gated by TCC.
-        let directory = home.appendingPathComponent("Library/Application Support/com.apple.TCC").path
-        if FileManager.default.fileExists(atPath: directory) {
-            return (try? FileManager.default.contentsOfDirectory(atPath: directory)) != nil
-        }
-        return false
-    }
-
-    /// Opens System Settings → Privacy & Security → Full Disk Access.
-    static func openFullDiskAccessSettings() {
-        let candidates = [
-            "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles",
-            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_AllFiles"
-        ]
-        for string in candidates {
-            if let url = URL(string: string), NSWorkspace.shared.open(url) {
-                return
-            }
-        }
-        NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/System Settings.app"))
     }
 }

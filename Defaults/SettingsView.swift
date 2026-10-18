@@ -23,7 +23,6 @@ struct SettingsView: View {
 // MARK: - General
 
 struct GeneralSettingsView: View {
-    @AppStorage("showMenuBarIcon") private var showMenuBarIcon = true
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -35,16 +34,6 @@ struct GeneralSettingsView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-            }
-
-            Section {
-                Toggle("Show icon in the menu bar", isOn: $showMenuBarIcon)
-            } header: {
-                Text("Menu Bar")
-            } footer: {
-                Text("Adds a status-bar item with quick access to permissions, settings, and the main window.")
-                    .font(.jb(10))
-                    .foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)
@@ -85,23 +74,6 @@ struct PermissionsSettingsView: View {
                     .font(.jb(10))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Section("Full Disk Access") {
-                statusLine(
-                    title: "Full Disk Access",
-                    detail: appState.hasFullDiskAccess ? "Granted" : "Not granted",
-                    ok: appState.hasFullDiskAccess
-                )
-
-                Text("Full Disk Access is usually not required: applying defaults and restarting apps only needs administrator access. Grant it only if a command reports a permission error.")
-                    .font(.jb(10))
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Button("Open Full Disk Access Settings…") {
-                    Permissions.openFullDiskAccessSettings()
-                }
             }
 
             Section("Terminal") {
